@@ -1,25 +1,62 @@
-const CACHE_NAME = 'parking-map-v1';
+const CACHE_VERSION = 'v2'; // 每次更新時修改版本號
+const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
 const ASSETS = [
-  '/parking-map/', // 確保這裡是完整路徑
-  '/parking-map/index.html',
-  '/parking-map/styles.css',
-  '/parking-map/main.js',
-  '/parking-map/icon-192x192.png',
-  '/parking-map/icon-512x512.png'
+  './',
+  './index.html',
+  './styles.css',
+  './main.js',
+  './manifest.json',
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
 ];
 
-// 安裝 Service Worker
+// 安裝時清除舊緩存並緩存新資源
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(ASSETS))
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => {
+      return caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS));
+    })
+  );
+  self.skipWaiting(); // 強制立即激活新 Service Worker
+});
+
+// 激活時清理舊緩存
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
   );
 });
 
-// 攔截網絡請求並返回緩存內容
+// 優先從網路獲取，失敗時回退緩存
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => response || fetch(event.request))
+    fetch(event.request)
+      .then((response) => {
+        // 如果是靜態資源，更新緩存
+        if (event.request.method === 'GET' && event.request.url.startsWith('http')) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });

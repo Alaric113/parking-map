@@ -15,11 +15,13 @@
         <div id="refreshTime">
             最後更新時間: <span id="time"></span>
         </div>
-        <label class="switch">
-            <input type="checkbox" id="showAvailableOnly">
-            <span class="slider"></span>
+        <div class="filter-control">
             <span class="label-text">只顯示目前空格</span>
-        </label>
+            <label class="switch">
+                <input type="checkbox" id="showAvailableOnly">
+                <span class="slider"></span>
+            </label>
+        </div>
     </div>
     <div id="map"></div>
     <div id="parkingList">
@@ -30,5 +32,36 @@
     </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="./main.js"></script>
+    <!-- 註冊 Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('Service Worker 註冊成功:', registration);
+                    
+                    // 檢測到更新時提示用戶刷新
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'activated') {
+                                if (confirm('有新版本可用，是否重新加載頁面？')) {
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    });
+                })
+                .catch((error) => {
+                    console.error('Service Worker 註冊失敗:', error);
+                });
+
+            // 定期檢查更新
+            setInterval(() => {
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.update();
+                });
+            }, 3600000); // 每小時檢查一次
+        }
+    </script>
 </body>
 </html>
