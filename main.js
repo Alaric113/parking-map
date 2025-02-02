@@ -107,9 +107,16 @@ function filterAndRenderParkingData() {
     const showAvailableOnly = document.getElementById('showAvailableOnly').checked;
 
     // 過濾數據
-    const filteredData = showAvailableOnly 
+    let filteredData = showAvailableOnly 
         ? originalData.filter(item => item.remark === '目前空格') 
         : originalData;
+
+    // 排序：目前空格的放前面
+    filteredData.sort((a, b) => {
+        if (a.remark === '目前空格' && b.remark !== '目前空格') return -1;
+        if (a.remark !== '目前空格' && b.remark === '目前空格') return 1;
+        return 0;
+    });
 
     // 清除舊的多邊形
     map.eachLayer((layer) => {
@@ -119,7 +126,7 @@ function filterAndRenderParkingData() {
     });
 
     // 添加新的多邊形
-    originalData.forEach((item) => {
+    filteredData.forEach((item) => {
         if (item.remark === '目前空格' || item.remark === '目前有車停放') {
             const coords = parseWKT(item.wkt);
             const color = item.remark === '目前空格' ? 'blue' : 'red';

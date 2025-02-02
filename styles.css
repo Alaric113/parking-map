@@ -177,14 +177,9 @@ input:checked + .slider:before {
 }
 
 /* 移動端樣式 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .parking-card {
         flex: 1 1 calc(50% - 10px); /* 移動端每行顯示 2 張卡片 */
     }
 }
 
-@media (max-width: 480px) {
-    .parking-card {
-        flex: 1 1 100%; /* 移動端每行顯示 1 張卡片 */
-    }
-}
