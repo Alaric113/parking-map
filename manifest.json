@@ -1,0 +1,22 @@
+{
+    "short_name": "ParkingMap",
+    "name": "Taiwan Parking Map",
+    "description": "A web app for displaying parking information in Taiwan.",
+    "icons": [
+      {
+        "src": "icon-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "icon-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "/parking-map/",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "scope": "/parking-map/",
+    "theme_color": "#ffffff"
+  }

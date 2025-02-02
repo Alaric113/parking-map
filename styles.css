@@ -1,0 +1,190 @@
+/* 基本樣式 */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* 禁用頁面滾動 */
+    font-family: Arial, sans-serif;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    font-size: 16px; /* 設置基礎字體大小 */
+}
+
+/* 地圖樣式 */
+#map {
+    width: 100%;
+    height: 50vh; /* 高度為視口高度的 50% */
+}
+
+/* 控制欄樣式 */
+#controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: white;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 切換開關樣式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.label-text {
+    position: absolute;
+    left: 60px;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    color: #333;
+}
+
+/* 停車場資訊列表樣式 */
+#parkingList {
+    height: 50vh; /* 高度為視口高度的 50% */
+    overflow-y: auto; /* 允許列表區域滾動 */
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #ccc #f1f1f1; /* Firefox */
+}
+
+#parkingList h2 {
+    margin: 0 0 10px;
+    font-size: 1.25rem; /* 20px */
+    color: #333;
+    text-align: center;
+}
+
+/* 自定義滾動條樣式（適用於 WebKit 瀏覽器） */
+#parkingList::-webkit-scrollbar {
+    width: 8px;
+}
+
+#parkingList::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#parkingList::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+#parkingList::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* 停車場卡片容器 */
+#parkingCards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+}
+
+/* 單個卡片樣式 */
+.parking-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    flex: 1 1 calc(33.333% - 20px); /* 桌面端每行顯示 3 張卡片 */
+    box-sizing: border-box;
+    cursor: pointer; /* 讓卡片看起來可以點擊 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 卡片懸停效果 */
+.parking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 移動端禁用懸停效果 */
+@media (hover: none) {
+    .parking-card:hover {
+        transform: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* 卡片內容樣式 */
+.parking-card h3 {
+    margin: 0 0 10px;
+    font-size: 1.125rem; /* 18px */
+    color: #333;
+    font-weight: bold;
+}
+
+.parking-card p {
+    margin: 5px 0;
+    font-size: 0.875rem; /* 14px */
+    color: #666;
+    line-height: 1.5;
+}
+
+/* 移動端樣式 */
+@media (max-width: 768px) {
+    .parking-card {
+        flex: 1 1 calc(50% - 10px); /* 移動端每行顯示 2 張卡片 */
+    }
+}
+
+@media (max-width: 480px) {
+    .parking-card {
+        flex: 1 1 100%; /* 移動端每行顯示 1 張卡片 */
+    }
+}

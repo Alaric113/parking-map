@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Taiwan Parking Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <!-- 添加 Web App Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    <!-- 設置主題顏色 -->
+    <meta name="theme-color" content="#000000">
+</head>
+<body>
+    <div id="controls">
+        <div id="refreshTime">
+            最後更新時間: <span id="time"></span>
+        </div>
+        <label class="switch">
+            <input type="checkbox" id="showAvailableOnly">
+            <span class="slider"></span>
+            <span class="label-text">只顯示目前空格</span>
+        </label>
+    </div>
+    <div id="map"></div>
+    <div id="parkingList">
+        <h2>停車場資訊</h2>
+        <div id="parkingCards">
+            <!-- 停車場卡片將動態插入這裡 -->
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="./main.js"></script>
+</body>
+</html>
