@@ -324,4 +324,95 @@ input:checked + .slider:before {
     #main-content {
         padding-bottom: var(--mobile-nav-height);
     }
+    #parkingCards {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 12px;
+        padding: 8px;
+    }
+
+    .parking-card {
+        flex: none;
+        width: calc(100% - 16px);
+        margin: 0 auto 12px;
+        padding: 16px;
+        position: relative;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .parking-card h3 {
+        font-size: 1.1rem;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* 限制標題行數 */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .status {
+        font-size: 0.9rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background: #f5f5f5;
+        align-self: flex-start;
+    }
+
+    .fee-info {
+        font-size: 0.9rem;
+        padding-top: 8px;
+    }
+
+    .favorite-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 8px;
+        z-index: 2;
+    }
+
+    .fa-star {
+        font-size: 1.4rem;
+    }
+
+    /* 點擊反饋效果 */
+    .parking-card:active {
+        transform: scale(0.98);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media (max-width: 480px) {
+    .parking-card {
+        border-radius: 6px;
+        padding: 12px;
+    }
+
+    .card-header h3 {
+        font-size: 1rem;
+    }
+
+    .fee-info h4 {
+        font-size: 0.95rem;
+    }
+
+    .fee-info p {
+        font-size: 0.85rem;
+    }
+
+    .fa-star {
+        font-size: 1.2rem;
+    }
+}
+
+/* 觸控優化 */
+@media (hover: none) {
+    .parking-card:hover {
+        transform: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 }
