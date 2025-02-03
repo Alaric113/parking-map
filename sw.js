@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v2'; // 每次更新時修改版本號
+const CACHE_VERSION = 'v3'; // 每次更新時修改版本號
 const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
 const ASSETS = [
   './',
