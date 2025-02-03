@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v3.0.2'; // 每次更新時修改版本號
+const CACHE_VERSION = 'v3.0.3'; // 每次更新時修改版本號
 const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
 const ASSETS = [
   './',
@@ -6,6 +6,11 @@ const ASSETS = [
   './styles.css',
   './main.js',
   './manifest.json',
+  './js/app.js',
+  './js/api.js',  
+  './js/map.js',
+  './js/settings.js',
+  './js/storage.js',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
 ];

@@ -170,7 +170,7 @@ function updateParkingCards(parkingData) {
         weekdayFee.textContent = `平日：${spot.weekdayFee || '尚無資料'}`;
 
         const holidayFee = document.createElement('p');
-        holidayFee.textContent = `假日：${spot.holidayFee || '尚無資料'}`;
+        holidayFee.textContent = `時間：${spot.holidayFee || '尚無資料'}`;
 
         // Append elements to feeInfo
         feeInfo.appendChild(feeHeading);
