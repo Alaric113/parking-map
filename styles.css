@@ -1,25 +1,28 @@
-/* 基本樣式 */
-html, body {
+/* Base styles */
+:root {
+    --sidebar-width: 240px;
+    --mobile-nav-height: 60px;
+    --primary-color: #2196F3;
+    --background-color: #f5f5f5;
+    --card-background: #ffffff;
+    
+}
+
+* {
     margin: 0;
     padding: 0;
-    height: 100%;
-    overflow: hidden; /* 禁用頁面滾動 */
-    font-family: Arial, sans-serif;
-    user-select: none;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
-    font-size: 16px; /* 設置基礎字體大小 */
+    box-sizing: border-box;
 }
 
-/* 地圖樣式 */
-#map {
-    width: 100%;
-    height: 50vh; /* 高度為視口高度的 50% */
+#home{
+    overflow: hidden;
+}
+#parking-info{
+    overflow-y: auto;
+    height: 50vh;
 }
 
-/* 控制欄樣式 */
+
 #controls {
     position: absolute;
     top: 10px;
@@ -93,43 +96,110 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-/* 停車場資訊列表樣式 */
-#parkingList {
-    height: 50vh; /* 高度為視口高度的 50% */
-    overflow-y: auto; /* 允許列表區域滾動 */
-    padding: 10px;
-    border-top: 1px solid #ccc;
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: #ccc #f1f1f1; /* Firefox */
+.app-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
 
-#parkingList h2 {
-    margin: 0 0 10px;
-    font-size: 1.25rem; /* 20px */
-    color: #333;
+/* Sidebar styles */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--card-background);
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.sidebar-header {
+    padding: 1rem 0;
     text-align: center;
 }
 
-/* 自定義滾動條樣式（適用於 WebKit 瀏覽器） */
-#parkingList::-webkit-scrollbar {
-    width: 8px;
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-#parkingList::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+.sidebar .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: #333;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
 }
 
-#parkingList::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
+.sidebar .nav-item:hover,
+.sidebar .nav-item.active {
+    background-color: var(--primary-color);
+    color: white;
 }
 
-#parkingList::-webkit-scrollbar-thumb:hover {
-    background: #999;
+/* Main content area */
+#main-content {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
 }
 
-/* 停車場卡片容器 */
+.page {
+    display: none;
+    height: 100%;
+}
+
+.page.active {
+    display: block;
+}
+
+/* Map container */
+.map-container {
+    position: relative;
+    height: 50vh;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+/* Controls */
+#location-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.control-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Parking cards */
+#parking-info {
+    padding: 1rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
 #parkingCards {
     display: flex;
     flex-wrap: wrap;
@@ -138,52 +208,120 @@ input:checked + .slider:before {
     justify-content: center;
 }
 
-/* 單個卡片樣式 */
 .parking-card {
-    background-color: #fff;
+    background: var(--card-background);
     border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    flex: 1 1 calc(33.333% - 20px); /* 桌面端每行顯示 3 張卡片 */
     box-sizing: border-box;
-    cursor: pointer; /* 讓卡片看起來可以點擊 */
+    border-radius: 8px;
+    padding: 15px;
+    flex: 1 1 calc(33.333% - 20px);
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 5px;
+}
 
-/* 卡片懸停效果 */
 .parking-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* 移動端禁用懸停效果 */
-@media (hover: none) {
-    .parking-card:hover {
-        transform: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+.parking-card .fee-info {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
 }
 
-/* 卡片內容樣式 */
-.parking-card h3 {
-    margin: 0 0 10px;
-    font-size: 1.125rem; /* 18px */
+.favorite-btn {
+    text-decoration:none;
+    background-color:transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.fa-star{
+    font-size: 1.3rem;
+}
+
+.fa-solid{
+    color: #df3d21;
+}
+
+
+
+/* Settings page */
+.settings-group {
+    background: var(--card-background);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.setting-item {
+    margin: 1rem 0;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.setting-item input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Mobile navbar */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--mobile-nav-height);
+    background: var(--card-background);
+    border-top: 1px solid #e0e0e0;
+    padding: 0.5rem;
+    z-index: 1000;
+}
+
+.mobile-nav {
+    display: none;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mobile-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
     color: #333;
-    font-weight: bold;
 }
 
-.parking-card p {
-    margin: 5px 0;
-    font-size: 0.875rem; /* 14px */
-    color: #666;
-    line-height: 1.5;
+.mobile-nav .nav-item.active {
+    color: var(--primary-color);
 }
 
-/* 移動端樣式 */
-@media (max-width: 480px) {
-    .parking-card {
-        flex: 1 1 calc(50% - 10px); /* 移動端每行顯示 2 張卡片 */
+/* Responsive design */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    
+    .mobile-nav {
+        display: flex;
+    }
+    
+    #main-content {
+        padding-bottom: var(--mobile-nav-height);
     }
 }
-
