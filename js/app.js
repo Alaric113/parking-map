@@ -150,7 +150,7 @@ function updateParkingCards(parkingData) {
 
         const status = document.createElement('p');
         status.className = 'status';
-        status.textContent = `可用車位: ${spot.availableSpaces}`;
+        status.textContent = `${spot.availableSpaces}`;
 
         // Append elements to cardHeader
         cardHeader.appendChild(favoriteBtn);
@@ -198,7 +198,7 @@ function updateParkingCards(parkingData) {
 
 
 function filterData(){
-    
+
 }
 
 // Favorite toggle handler
