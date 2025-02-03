@@ -198,8 +198,12 @@ function updateParkingCards(parkingData) {
 
 
 function filterData(){
+    updateParkingCards(enhanceParkingData())
+    updateMap(enhanceParkingData(), map)
 
 }
+
+document.getElementById('showAvailableOnly').addEventListener('change', filterData);
 
 // Favorite toggle handler
 window.toggleFavorite = function (geo, favoriteIcon) {

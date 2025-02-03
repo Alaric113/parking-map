@@ -7,7 +7,8 @@ export function initMap(defaultLat, defaultLon) {
     const map = L.map('map').setView([defaultLat, defaultLon], 15);
     
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 24
     }).addTo(map);
 
     // Add user location marker if available
