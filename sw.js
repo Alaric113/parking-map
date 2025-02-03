@@ -1,5 +1,7 @@
 const CACHE_VERSION = 'v3.0.3'; // 每次更新時修改版本號
 const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
+
+// 需要缓存的资源列表
 const ASSETS = [
   './',
   './index.html',
@@ -7,7 +9,7 @@ const ASSETS = [
   './main.js',
   './manifest.json',
   './js/app.js',
-  './js/api.js',  
+  './js/api.js',
   './js/map.js',
   './js/settings.js',
   './js/storage.js',
@@ -30,7 +32,7 @@ self.addEventListener('install', (event) => {
       return caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS));
     })
   );
-  self.skipWaiting(); // 強制立即激活新 Service Worker
+  self.skipWaiting(); // 强制新 Service Worker 立即激活
 });
 
 // 激活時清理舊緩存
@@ -46,6 +48,7 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  self.clients.claim(); // 立即控制所有客户端
 });
 
 // 優先從網路獲取，失敗時回退緩存
@@ -64,4 +67,11 @@ self.addEventListener('fetch', (event) => {
       })
       .catch(() => caches.match(event.request))
   );
+});
+
+// 监听来自页面的消息
+self.addEventListener('message', (event) => {
+  if (event.data === 'get-version') {
+    event.source.postMessage({ version: CACHE_VERSION });
+  }
 });

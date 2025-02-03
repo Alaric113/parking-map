@@ -14,21 +14,26 @@
     <aside id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <h1>停車地圖</h1>
+        
+            <nav class="sidebar-nav">
+                <a href="#home" class="nav-item active">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>主頁</span>
+                </a>
+                <a href="#favorites" class="nav-item">
+                    <i class="fas fa-star"></i>
+                    <span>收藏</span>
+                </a>
+                <a href="#settings" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>設定</span>
+                </a>
+            </nav>
         </div>
-        <nav class="sidebar-nav">
-            <a href="#home" class="nav-item active">
-                <i class="fas fa-map-marked-alt"></i>
-                <span>主頁</span>
-            </a>
-            <a href="#favorites" class="nav-item">
-                <i class="fas fa-star"></i>
-                <span>收藏</span>
-            </a>
-            <a href="#settings" class="nav-item">
-                <i class="fas fa-cog"></i>
-                <span>設定</span>
-            </a>
-        </nav>
+        <!-- 在侧边栏或设置页面中添加以下代码 -->
+        <div id="version-info">
+            <span id="current-version">載入中...</span>
+        </div>
     </aside>
 
     <!-- Main content area -->
@@ -85,6 +90,12 @@
                     <label for="default-lon">預設經度</label>
                     <input type="number" id="default-lon" step="0.000001" value="121.4937824851125">
                 </div>
+            </div>
+            <!-- 在侧边栏或设置页面中添加以下代码 -->
+            <div id="version-info">
+                <p>當前版本: <span id="current-version">載入中...</span></p>
+                <button id="check-update-btn">檢查更新</button>
+                <p id="update-status"></p>
             </div>
         </div>
     </main>

@@ -95,6 +95,7 @@ input:checked + .slider:before {
     border-right: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     padding: 1rem;
 }
 
@@ -253,6 +254,12 @@ input:checked + .slider:before {
 
 .fa-solid{
     color: #df3d21;
+}
+
+#version-info{
+    bottom: 0;
+    width: 100%;
+    
 }
 
 

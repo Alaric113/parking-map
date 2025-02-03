@@ -5,6 +5,82 @@ import { initSettings, getSettings, saveSettings } from './settings.js';
 import { getParkingData, enhanceParkingData } from './api.js';
 
 
+
+// 获取版本信息和检查更新按钮
+const currentVersionElement = document.getElementById('current-version');
+const checkUpdateButton = document.getElementById('check-update-btn');
+const updateStatusElement = document.getElementById('update-status');
+
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker 註冊成功:', registration);
+  
+          // 检查是否有新版本
+          registration.onupdatefound = () => {
+            const installingWorker = registration.installing;
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  console.log('新版本已準備好，請刷新頁面以更新');
+                  // 提示用户刷新页面
+                } else {
+                  console.log('Service Worker 已安裝');
+                }
+              }
+            };
+          };
+        })
+        .catch((error) => {
+          console.error('Service Worker 註冊失敗:', error);
+        });
+    });
+  }
+// 获取当前版本
+function getCurrentVersion() {
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage('get-version');
+    } else {
+        currentVersionElement.textContent = '未啟用 Service Worker';
+    }
+}
+
+
+// 检查更新
+function checkForUpdates() {
+    updateStatusElement.textContent = '檢查更新中...';
+    fetch('./sw.js')
+        .then((response) => response.text())
+        .then((scriptText) => {
+            const versionMatch = scriptText.match(/const CACHE_VERSION = '(.+?)';/);
+            if (versionMatch && versionMatch[1] !== CACHE_VERSION) {
+                updateStatusElement.textContent = '發現新版本，請刷新頁面以更新';
+            } else {
+                updateStatusElement.textContent = '已是最新版本';
+            }
+        })
+        .catch(() => {
+            updateStatusElement.textContent = '檢查更新失敗';
+        });
+}
+
+// 监听 Service Worker 的消息
+if (navigator.serviceWorker) {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.version) {
+            currentVersionElement.textContent = event.data.version;
+        }
+    });
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', () => {
+    getCurrentVersion();
+    checkUpdateButton.addEventListener('click', checkForUpdates);
+});
+
 let map, currentPosition;
 let updateInterval;
 
