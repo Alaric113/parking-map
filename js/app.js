@@ -2,7 +2,8 @@
 import { initMap, updateMap, createPopupContent } from './map.js';
 import { initStorage, getFavorites, addToFavorites, removeFromFavorites } from './storage.js';
 import { initSettings, getSettings, saveSettings } from './settings.js';
-import { getParkingData, enhanceParkingData } from './api.js';
+import { getParkingData, enhanceParkingData, serachFilter} from './api.js';
+import { updateFavCards } from './favorite.js';
 
 
 
@@ -101,6 +102,7 @@ async function initApp() {
 
     // Start data updates
     startDataUpdates(settings.refreshInterval);
+    
 
     // Initialize location tracking
     initLocationTracking();
@@ -179,6 +181,7 @@ async function updateParkingData() {
 
         // Update cards
         updateParkingCards(data);
+        updateFavCards(data)
 
         // Update last refresh time
         document.getElementById('refresh-time').textContent =
@@ -222,7 +225,7 @@ function updateParkingCards(parkingData) {
         favoriteBtn.appendChild(favoriteIcon);
 
         const parkName = document.createElement('h3');
-        parkName.textContent = spot.parkName;
+        parkName.textContent = `${spot.parkName || '沒有資訊'}`;
 
         const status = document.createElement('p');
         status.className = 'status';
@@ -272,6 +275,14 @@ function updateParkingCards(parkingData) {
     });
 }
 
+document.getElementById('searchCards').addEventListener('input', (event) => {
+    const searchValue = document.getElementById('searchCards').value.trim();
+    if (searchValue) {
+        updateParkingCards(serachFilter(searchValue));
+    } else {
+        updateParkingCards(enhanceParkingData());
+    }
+})
 
 function filterData(){
     updateParkingCards(enhanceParkingData())

@@ -34,7 +34,12 @@ export async function getParkingData() {
             const data = await response.json();
             console.log('成功從 API 獲取數據');
             originalData = data;
-            return enhanceParkingData();
+            const searchValue = document.getElementById('searchCards').value.trim();
+            if (searchValue) {
+                return serachFilter(searchValue);
+            } else {
+                return enhanceParkingData();
+            }
         }
     } catch (error) {
         console.error('Request failed:', error);
@@ -98,6 +103,17 @@ export function enhanceParkingData() {
         weekdayFee: item.payex || '尚無資料',
         holidayFee: item.servicetime || '尚無資料'
     }));
+}
+
+export function serachFilter(text) {
+    const filteredData = enhanceParkingData().filter(item => {
+        // 检查 item.parkName 是否存在且为字符串
+        if (item.parkName && typeof item.parkName === 'string') {
+            return item.parkName.match(text);
+        }
+        return false; // 如果 parkName 无效，跳过该项
+    });
+    return filteredData;
 }
 
 // 獲取本地快取數據

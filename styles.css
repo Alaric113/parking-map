@@ -17,7 +17,7 @@
 #home{
     overflow: hidden;
 }
-#parking-info{
+#parkingCards{
     overflow-y: auto;
     height: 50vh;
 }
@@ -178,6 +178,7 @@ input:checked + .slider:before {
 /* Parking cards */
 #parking-info {
     padding: 1rem;
+    padding-top: 0.3rem;
 }
 
 .section-header {
@@ -185,8 +186,16 @@ input:checked + .slider:before {
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     width: 100%;
+}
+#searchCards{
+    width: 100%;
+    height: 1.5rem;
+    border-radius: 30px;
+    padding: 5px;
+    margin-bottom: 5px;
+    text-decoration: none;
 }
 #refresh-time{
     width: 25%;
@@ -216,8 +225,11 @@ input:checked + .slider:before {
     border: 1px solid #ddd;
     box-sizing: border-box;
     border-radius: 8px;
-    padding: 15px;
-    flex: 1 1 calc(33.333% - 20px);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1 1 calc(50% - 10px);
     margin-bottom: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     cursor: pointer;
@@ -235,11 +247,6 @@ input:checked + .slider:before {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.parking-card .fee-info {
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid #eee;
-}
 
 .favorite-btn {
     text-decoration:none;
@@ -335,13 +342,13 @@ input:checked + .slider:before {
     }
     #parkingCards {
         display: grid;
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: repeat(1,1fr);
 
     }
 
     .parking-card {
         flex: none;
-        width: calc(100% - 16px);
+        width: calc(100% - 10px);
         margin: 0 auto 7px;
         padding: 8px;
         position: relative;
@@ -373,7 +380,7 @@ input:checked + .slider:before {
 
     .fee-info {
         font-size: 0.9rem;
-        padding-top: 8px;
+        text-align: center;
     }
 
     .favorite-btn {
