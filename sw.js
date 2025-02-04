@@ -5,7 +5,8 @@ const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
 const ASSETS = [
   './',
   './index.html',
-  './styles.css',
+  './css/styles.css',
+  './css/fav.css',
   './main.js',
   './manifest.json',
   './js/app.js',
@@ -75,4 +76,31 @@ self.addEventListener('message', (event) => {
   if (event.data === 'get-version') {
     event.source.postMessage({ version: CACHE_VERSION });
   }
+});
+
+
+// sw.js
+self.addEventListener('push', (event) => {
+  const payload = event.data ? event.data.text() : '新通知';
+  const title = '停車地圖通知';
+
+  const options = {
+      body: payload,
+      icon: '/icons/icon-192x192.png', // 替换为你的图标路径
+      badge: '/icons/badge-72x72.png', // 替换为你的徽章路径
+  };
+
+  event.waitUntil(
+      self.registration.showNotification(title, options)
+  );
+});
+
+// 处理通知点击事件
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close(); // 关闭通知
+
+  // 打开应用页面
+  event.waitUntil(
+      clients.openWindow('/') // 替换为你的应用首页路径
+  );
 });

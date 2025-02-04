@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" />
-    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="./css/fav.css">
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#ffffff">
 </head>
@@ -32,7 +33,7 @@
         </div>
         <!-- 在侧边栏或设置页面中添加以下代码 -->
         <div id="version-info">
-            <span id="current-version">載入中...</span>
+            <span class="current-version">載入中...</span>
         </div>
     </aside>
 
@@ -61,15 +62,22 @@
                     </div>
                 </div>
                 <input type="text" id="searchCards" placeholder="搜尋停車場...">
-                <div id="parkingCards">目前無資料顯示</div>
+                <div id="parkingCards" class="cards">目前無資料顯示</div>
             </div>
         </div>
 
         <!-- Favorites Page -->
         <div id="favorites" class="page">
-            <h2>收藏的停車場</h2>
+            <h2 class="favHeader">收藏與訂閱</h2>
+            <div class="notifyControl">
+                <h2>設定車位偵測通知</h2>
+                <p style="color: firebrick;">注意!偵測期間須保持頁面打開</p>
+                <div class="notButton">
+                    
+                </div>
+            </div>
             <div id="favorites-list">
-                <div id="favCards">
+                <div id="favCards" class="cards">
                     目前無資料顯示
                 </div>
             </div>
@@ -96,9 +104,9 @@
                     <input type="number" id="default-lon" step="0.000001" value="121.4937824851125">
                 </div>
             </div>
-            <!-- 在侧边栏或设置页面中添加以下代码 -->
+            
             <div id="version-info">
-                <p>當前版本: <span id="current-version">載入中...</span></p>
+                <p>當前版本: <span class="current-version">載入中...</span></p>
                 <button id="check-update-btn">檢查更新</button>
                 <p id="update-status"></p>
             </div>
@@ -127,7 +135,7 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js')
                 .then((registration) => {
-                    console.log('Service Worker 註冊成功:', registration);
+                    
                     
                     // 檢測到更新時提示用戶刷新
                     registration.addEventListener('updatefound', () => {

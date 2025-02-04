@@ -34,9 +34,9 @@ export async function getParkingData() {
             const data = await response.json();
             console.log('成功從 API 獲取數據');
             originalData = data;
-            const searchValue = document.getElementById('searchCards').value.trim();
-            if (searchValue) {
-                return serachFilter(searchValue);
+            const searchValue = document.getElementById('searchCards');
+            if (searchValue.value) {
+                return serachFilter(searchValue.value.trim());
             } else {
                 return enhanceParkingData();
             }

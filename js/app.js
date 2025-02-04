@@ -8,7 +8,7 @@ import { updateFavCards } from './favorite.js';
 
 
 // 获取版本信息和检查更新按钮
-const currentVersionElement = document.getElementById('current-version');
+const currentVersionElement = document.getElementsByClassName('current-version');
 const checkUpdateButton = document.getElementById('check-update-btn');
 const updateStatusElement = document.getElementById('update-status');
 
@@ -71,7 +71,10 @@ function checkForUpdates() {
 if (navigator.serviceWorker) {
     navigator.serviceWorker.addEventListener('message', (event) => {
         if (event.data && event.data.version) {
-            currentVersionElement.textContent = event.data.version;
+            for(let i of currentVersionElement){
+                i.innerHTML = event.data.version
+            }
+    
         }
     });
 }
@@ -121,6 +124,7 @@ function setupNavigation() {
     });
 }
 
+
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
@@ -130,10 +134,12 @@ function showPage(pageId) {
 
 function updateNavActiveState(activeId) {
     document.querySelectorAll('.nav-item').forEach(item => {
+        console.log(item);
         const itemId = item.getAttribute('href').substring(1);
         item.classList.toggle('active', itemId === activeId);
     });
 }
+
 
 // Location tracking
 function initLocationTracking() {
@@ -199,6 +205,15 @@ function updateParkingCards(parkingData) {
     // Clear the container
     container.innerHTML = '';
 
+
+    if (parkingData.length === 0) {
+        const noDataMessage = document.createElement('p');
+        noDataMessage.textContent = '無資料';
+        noDataMessage.className = 'no-data'; // Optional: Add a class for styling
+        container.appendChild(noDataMessage);
+        return; // Exit the function if no data
+    }
+
     parkingData.forEach(spot => {
         const lat = parseFloat(spot.lat);
         const lon = parseFloat(spot.lon);
@@ -230,11 +245,17 @@ function updateParkingCards(parkingData) {
         const status = document.createElement('p');
         status.className = 'status';
         status.textContent = `${spot.availableSpaces}`;
+        if(spot.availableSpaces === '目前空格'){
+            status.classList.add('available');
+        }else if(spot.availableSpaces === '目前有車停放'){
+            status.classList.add('unavailable');
+        }
 
         // Append elements to cardHeader
         cardHeader.appendChild(favoriteBtn);
 
         const headText = document.createElement('div');
+        headText.className = 'textHeader';
         headText.appendChild(parkName);
         headText.appendChild(status);
         cardHeader.appendChild(headText);
@@ -285,7 +306,7 @@ document.getElementById('searchCards').addEventListener('input', (event) => {
 })
 
 function filterData(){
-    updateParkingCards(enhanceParkingData())
+    updateParkingCards(serachFilter(searchValue))
     updateMap(enhanceParkingData(), map)
 
 }
@@ -306,10 +327,37 @@ window.toggleFavorite = function (geo, favoriteIcon) {
         addToFavorites(geo[0], geo[1]);
         favoriteIcon.className = 'fa-solid fa-star';
     }
-    updateParkingCards(enhanceParkingData())
+    updateParkingCards(filterData())
+    updateFavCards(enhanceParkingData())
 };
 
+function requestNotificationPermission() {
+    if ('Notification' in window) {
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log('通知授權');
+            } else {
+                console.log('通知未授權');
+            }
+        });
+    } else {
+        console.log('當前瀏覽器不支持通知');
+    }
+}
+function showNotification(title, body) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, {
+            body: body,
+            icon: '/icons/icon-192x192.png', // 替换为你的图标路径
+        });
+    }
+}
+
 // Initialize app
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', ()=>{
+    initApp()
+    requestNotificationPermission();
+});
+    
 
 export { updateParkingData };
