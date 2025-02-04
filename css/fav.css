@@ -21,14 +21,18 @@
 
 .notButton {
     /* 通知按钮的样式 */
-   width: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
 
 #favorites-list {
     flex: 1; /* 占据剩余空间 */
     padding: 1rem;
     overflow-y: auto; /* 允许垂直滚动 */
-    height: 77vh; /* 占据 60% 的视口高度 */
+    height: 65vh; /* 占据 60% 的视口高度 */
     background-color: #fff; /* 可选：背景色 */
 }
 

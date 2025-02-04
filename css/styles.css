@@ -144,7 +144,7 @@ input:checked + .slider:before {
 /* Map container */
 .map-container {
     position: relative;
-    height: 45vh;
+    height: 35vh;
 }
 
 #map {

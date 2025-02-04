@@ -134,7 +134,6 @@ function showPage(pageId) {
 
 function updateNavActiveState(activeId) {
     document.querySelectorAll('.nav-item').forEach(item => {
-        console.log(item);
         const itemId = item.getAttribute('href').substring(1);
         item.classList.toggle('active', itemId === activeId);
     });
@@ -306,6 +305,12 @@ document.getElementById('searchCards').addEventListener('input', (event) => {
 })
 
 function filterData(){
+    const searchValue = document.getElementById('searchCards').value.trim();
+    if (searchValue) {
+        updateParkingCards(serachFilter(searchValue));
+    } else {
+        updateParkingCards(enhanceParkingData());
+    }
     updateParkingCards(serachFilter(searchValue))
     updateMap(enhanceParkingData(), map)
 
