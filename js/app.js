@@ -267,29 +267,26 @@ function updateParkingCards(parkingData) {
         const headText = document.createElement('div');
         headText.className = 'textHeader';
         headText.appendChild(parkName);
-        headText.appendChild(status);
+       
         cardHeader.appendChild(headText);
 
         const feeInfo = document.createElement('div');
         feeInfo.className = 'fee-info';
 
-        const feeHeading = document.createElement('h4');
-        feeHeading.textContent = '收費資訊';
+    
 
         const weekdayFee = document.createElement('p');
-        weekdayFee.textContent = `平日：${spot.weekdayFee || '尚無資料'}`;
+        weekdayFee.textContent = `收費:${spot.weekdayFee || '尚無資料'}  時間:${spot.holidayFee || '尚無資料'}`;
 
-        const holidayFee = document.createElement('p');
-        holidayFee.textContent = `時間：${spot.holidayFee || '尚無資料'}`;
+        
 
         // Append elements to feeInfo
-        feeInfo.appendChild(feeHeading);
+        
         feeInfo.appendChild(weekdayFee);
-        feeInfo.appendChild(holidayFee);
+        headText.appendChild(feeInfo);
 
         // Append cardHeader and feeInfo to parkingCard
         parkingCard.appendChild(cardHeader);
-        parkingCard.appendChild(feeInfo);
 
         // Add click event to center map on the parking spot
         parkingCard.addEventListener('click', () => {
@@ -300,7 +297,7 @@ function updateParkingCards(parkingData) {
                 .setContent(createPopupContent(spot))
                 .openOn(map);
         });
-
+        parkingCard.appendChild(status);
         // Append the parkingCard to the container
         container.appendChild(parkingCard);
     });

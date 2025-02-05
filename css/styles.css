@@ -189,12 +189,20 @@ input:checked + .slider:before {
 }
 
 #searchCards {
-    width: 100%;
+    position: absolute;
+    top: 1rem;
+    left: 10%;
+    width: 80%;
+    background: #fffaeb;
     height: 1.5rem;
-    border-radius: 30px;
-    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    padding: 1rem;
     margin-bottom: 5px;
     text-decoration: none;
+    z-index: 1000;
+    color: 201A09;
+    
 }
 
 #refresh-time {
@@ -219,11 +227,12 @@ input:checked + .slider:before {
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
+    align-items: center;
 }
 
 .parking-card {
     background: var(--card-background);
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     box-sizing: border-box;
     border-radius: 8px;
     padding: 10px;
@@ -251,12 +260,12 @@ input:checked + .slider:before {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 5px;
 }
 
 .textHeader h3 {
     font-size: 1.1rem;
     margin: 0;
+    color:#201A09;
     flex-grow: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -272,17 +281,17 @@ input:checked + .slider:before {
     letter-spacing: 1px;
     font-weight: bold;
     border-radius: 30px;
-    background: #f5f5f5;
-    align-self: flex-start; /* Adjust based on content width */
+    background: #eee;
+    /* Adjust based on content width */
     white-space: nowrap; /* Prevent text wrapping */
 }
 
 .available {
-    background: #02e337;
+    color: #02e337;
 }
 
 .unavailable {
-    background: #fc425e;
+    color: #fc425e;
 }
 
 .parking-card:hover {
@@ -295,16 +304,18 @@ input:checked + .slider:before {
     background-color: transparent;
     border: none;
     cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #F5EFDB;
+    border-radius: 10px;
+    margin-right: 1rem;
 }
 .fee-info{
-    border-left: 1px solid #aaa;
-    flex-shrink: 1;
-    width: 50%;
-    padding-left: 5px;
     display: -webkit-box;
-    -webkit-line-clamp: 4; /* 限制標題行數 */
+    -webkit-line-clamp: 1; /* 限制標題行數 */
     -webkit-box-orient: vertical;
     overflow: hidden;
+    color: #A07D1C;
 }
 
 .fa-star {
@@ -391,14 +402,10 @@ input:checked + .slider:before {
         padding-bottom: var(--mobile-nav-height);
     }
     
-    #parkingCards {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-    }
-
+    
     .parking-card {
         flex: none;
-        width: calc(100% - 10px);
+        flex: 1 1 calc(50% - 10px);
         margin: 0 auto 7px;
         padding: 8px;
         position: relative;
@@ -417,9 +424,17 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 480px) {
+    #parkingCards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        
+    }
+
+
     .parking-card {
         border-radius: 6px;
         padding: 12px;
+        flex:1 1  calc(100%-10px);
     }
 
     .card-header h3 {
