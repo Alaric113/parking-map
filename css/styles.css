@@ -426,7 +426,7 @@ input:checked + .slider:before {
 @media (max-width: 480px) {
     #parkingCards {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(1, 1fr);
         
     }
 
@@ -434,7 +434,8 @@ input:checked + .slider:before {
     .parking-card {
         border-radius: 6px;
         padding: 12px;
-        flex:1 1  calc(100%-10px);
+        flex:none;
+        width: 100%;
     }
 
     .card-header h3 {
