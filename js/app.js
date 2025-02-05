@@ -2,7 +2,7 @@
 import { initMap, updateMap, createPopupContent } from './map.js';
 import { initStorage, getFavorites, addToFavorites, removeFromFavorites } from './storage.js';
 import { initSettings, getSettings, saveSettings } from './settings.js';
-import { getParkingData, enhanceParkingData, serachFilter,unifyData} from './api.js';
+import { getParkingData, searchFilter,unifyData,availableFilter} from './api.js';
 import { updateFavCards } from './favorite.js';
 
 
@@ -11,7 +11,7 @@ import { updateFavCards } from './favorite.js';
 const currentVersionElement = document.getElementsByClassName('current-version');
 const checkUpdateButton = document.getElementById('check-update-btn');
 const updateStatusElement = document.getElementById('update-status');
-
+let odata = [];
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -157,7 +157,7 @@ function initLocationTracking() {
 // 資料更新迴圈預設10秒
 async function startDataUpdates(interval) {
     // Initial update
-    await updateParkingData();
+    await fetchingParkingData();
 
     // Clear existing interval if any
     if (updateInterval) {
@@ -165,28 +165,40 @@ async function startDataUpdates(interval) {
     }
 
     // Start new interval
-    updateInterval = setInterval(updateParkingData, interval * 1000);
+    updateInterval = setInterval(fetchingParkingData, interval * 1000);
 }
 //定時資料獲取分發
-async function updateParkingData() {
+async function fetchingParkingData(){
     try {
         const data = await getParkingData();
         if (!data) return;
-        
-
-        // Update map
-        updateMap(data, map);
-
-        // Update cards
-        updateParkingCards(unifyData(data));
-        updateFavCards(unifyData(data));
-
-        // Update last refresh time
-        document.getElementById('refresh-time').textContent =
-            `${new Date().toLocaleTimeString()}`;
+        odata = data;
+        updateParkingData();
     } catch (error) {
         console.error('Failed to update parking data:', error);
     }
+}
+        // Update map
+function updateParkingData() {  
+    let data = odata
+    const searchValue = document.getElementById('searchCards').value.trim()
+
+    if (searchValue) {
+
+        // Update cards
+            
+        updateMap(searchFilter(data,searchValue), map);
+        updateParkingCards(searchFilter(unifyData(data),searchValue));
+            
+    } else {
+        updateMap(data, map);
+        updateParkingCards(unifyData(data));
+        updateFavCards(unifyData(data));
+    }
+    // Update last refresh time
+    document.getElementById('refresh-time').textContent =
+        `${new Date().toLocaleTimeString()}`;
+    
 }
 
 // 主頁面停車場卡片更新
@@ -295,27 +307,12 @@ function updateParkingCards(parkingData) {
 }
 // 搜索框(是否保留?)
 document.getElementById('searchCards').addEventListener('input', (event) => {
-    const searchValue = document.getElementById('searchCards').value.trim();
-    if (searchValue) {
-        updateParkingCards(serachFilter(searchValue));
-    } else {
-        updateParkingCards(enhanceParkingData());
-    }
+    console.log('typing')
+    updateParkingData();
 })
-//過濾資料(是否保留?)
-function filterData(){
-    const searchValue = document.getElementById('searchCards').value.trim();
-    if (searchValue) {
-        updateParkingCards(serachFilter(searchValue));
-    } else {
-        updateParkingCards(enhanceParkingData());
-    }
-    updateParkingCards(serachFilter(searchValue))
-    updateMap(enhanceParkingData(), map)
 
-}
 //只顯示停車slider 監聽器
-document.getElementById('showAvailableOnly').addEventListener('change', filterData);
+document.getElementById('showAvailableOnly').addEventListener('change', updateParkingData);
 
 // 收藏圖標toggle收藏圖標toggle
 window.toggleFavorite = function (parkName, favoriteIcon) {

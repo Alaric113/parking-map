@@ -54,59 +54,8 @@ export async function getParkingData() {
     }
 }
 
-// 增強停車場數據
-export function enhanceParkingData() {
-
-    const showAvailableOnly = document.getElementById('showAvailableOnly').checked;
-    const favorites = getFavorites();
-
-    // 過濾數據
-    let filteredData = showAvailableOnly
-        ? originalData.filter(item => item.remark === '目前空格')
-        : originalData;
-        
-    // 排序邏輯
-    filteredData.sort((a, b) => {
-        const aLat = parseFloat(a.lat);
-        const aLon = parseFloat(a.lon);
-        const bLat = parseFloat(b.lat);
-        const bLon = parseFloat(b.lon);
-
-        // 檢查是否為收藏
-        const aIsFavorite = favorites.some(([favoriteLat, favoriteLon]) =>
-            favoriteLat === aLat && favoriteLon === aLon
-        );
-        const bIsFavorite = favorites.some(([favoriteLat, favoriteLon]) =>
-            favoriteLat === bLat && favoriteLon === bLon
-        );
-
-        // 優先顯示收藏
-        if (aIsFavorite && !bIsFavorite) return -1;
-        if (!aIsFavorite && bIsFavorite) return 1;
-
-        // 其次顯示目前空格
-        const aIsAvailable = a.remark === '目前空格';
-        const bIsAvailable = b.remark === '目前空格';
-        if (aIsAvailable && !bIsAvailable) return -1;
-        if (!aIsAvailable && bIsAvailable) return 1;
-
-        // 最後處理無效數據（null 或 undefined）
-        if (!a.remark && b.remark) return 1;
-        if (a.remark && !b.remark) return -1;
-
-        return 0;
-    });
-
-    return filteredData.map(item => ({
-        ...item,
-        availableSpaces: item.remark || '尚無資料',
-        weekdayFee: item.payex || '尚無資料',
-        holidayFee: item.servicetime || '尚無資料'
-    }));
-}
-
-export function serachFilter(text) {
-    const filteredData = enhanceParkingData().filter(item => {
+export function searchFilter(data, text) {
+    const filteredData = data.filter(item => {
         // 检查 item.parkName 是否存在且为字符串
         if (item.parkName && typeof item.parkName === 'string') {
             return item.parkName.match(text);
@@ -115,8 +64,24 @@ export function serachFilter(text) {
     });
     return filteredData;
 }
+
+export function availableFilter(data) { 
+    
+    const filterdata = data.filter(item => {
+        if (item.left > 0) {
+            
+            return item;
+    
+        }
+        return false;
+    })
+    
+    return filterdata;
+}
+
 //提供卡片資訊
 export function unifyData(data) { 
+    
     const result = data.reduce((acc, item) => {
         const name = item.parkName || '未命名';
         if (!acc[name]||name=='未命名') {
@@ -148,7 +113,7 @@ export function unifyData(data) {
         }
         return acc;
     }, {});
-    const formattedResult = Object.values(result); 
+    let formattedResult = Object.values(result); 
 
     formattedResult.sort((a, b) => {
         const favorites = getFavorites();
@@ -170,6 +135,12 @@ export function unifyData(data) {
 
         return 0;
     });
+    const availableOnly = document.getElementById('showAvailableOnly').checked
+    if (availableOnly) {
+        
+        formattedResult = availableFilter(formattedResult);
+    
+    }
 
 
     return formattedResult
