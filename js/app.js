@@ -2,7 +2,7 @@
 import { initMap, updateMap, createPopupContent } from './map.js';
 import { initStorage, getFavorites, addToFavorites, removeFromFavorites } from './storage.js';
 import { initSettings, getSettings, saveSettings } from './settings.js';
-import { getParkingData, enhanceParkingData, serachFilter} from './api.js';
+import { getParkingData, enhanceParkingData, serachFilter,unifyData} from './api.js';
 import { updateFavCards } from './favorite.js';
 
 
@@ -198,6 +198,7 @@ async function updateParkingData() {
 
 // Render parking cards with fee info and favorite functionality
 function updateParkingCards(parkingData) {
+    console.log(unifyData(parkingData));
     const container = document.getElementById('parkingCards');
     const favorites = getFavorites();
 

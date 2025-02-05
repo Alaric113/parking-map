@@ -116,6 +116,19 @@ export function serachFilter(text) {
     return filteredData;
 }
 
+export function unifyData(data) { 
+    // ��理不符合規範的數��
+    return data.map(item => ({
+        id: item.id,
+        parkName: item.name,
+        lat: parseFloat(item.lat),
+        lon: parseFloat(item.lon),
+        availableSpaces: item.empty_lots,
+        weekdayFee: item.weekday_fee,
+        holidayFee: item.holiday_fee
+    }));
+}
+
 // 獲取本地快取數據
 function getCachedParkingData() {
     // 這裡可以實現從 localStorage 或其他地方獲取快取數據
