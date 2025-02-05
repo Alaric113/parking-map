@@ -109,7 +109,7 @@ export function createPopupContent(spot) {
         createFavoriteButton(spot, isFavorite),
         createParkName(spot.parkName),
         createStatus(spot.remark),
-        createFeeInfo(spot.weekdayFee, spot.holidayFee, spot.dataType)
+        createFeeInfo(spot.payex, spot.servicetime, spot.dataType)
     ]);
 
     return popupDiv;
@@ -117,8 +117,8 @@ export function createPopupContent(spot) {
 
 function checkIfFavorite(spot) {
     const favorites = getFavorites();
-    return favorites.some(([favoriteLat, favoriteLon]) =>
-        favoriteLat === spot.lat && favoriteLon === spot.lon
+    return favorites.some((existName) =>
+        existName === spot.parkName
     );
 }
 
@@ -135,7 +135,7 @@ function createFavoriteButton(spot, isFavorite) {
 
     favoriteBtn.onclick = (event) => {
         event.stopPropagation();
-        window.toggleFavorite([spot.lat, spot.lon], starIcon)(spot.parkId);
+        toggleFavorite(spot.parkName, starIcon);
     };
     favoriteBtn.appendChild(starIcon);
 
@@ -156,14 +156,14 @@ function createStatus(remark) {
 
 function createFeeInfo(weekdayFee, holidayFee, type) {
     const feeInfoDiv = document.createElement('div');
-    feeInfoDiv.className = 'fee-info';
+    feeInfoDiv.className = 'fee-info-pop';
 
     const weekdayFeeP = document.createElement('p');
     weekdayFeeP.textContent = `收費資訊: ${weekdayFee || '尚無資料'}`;
     feeInfoDiv.appendChild(weekdayFeeP);
 
     const holidayFeeP = document.createElement('p');
-    holidayFeeP.textContent = `收費時間: ${holidayFee + type || '尚無資料'}`;
+    holidayFeeP.textContent = `收費時間: ${holidayFee|| '尚無資料'}`;
     feeInfoDiv.appendChild(holidayFeeP);
 
     const parkType = document.createElement('p');

@@ -144,7 +144,7 @@ input:checked + .slider:before {
 /* Map container */
 .map-container {
     position: relative;
-    height: 35vh;
+    height: 40vh;
 }
 
 #map {
@@ -231,6 +231,7 @@ input:checked + .slider:before {
     align-items: center;
     justify-content: space-between;
     flex: 1 1 calc(50% - 10px);
+    width: 100%;
     margin-bottom: 1rem;
     height: 7rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -243,6 +244,7 @@ input:checked + .slider:before {
     align-items: center;
     margin-bottom: 0.5rem;
     flex-grow: 1;
+    width: 60%;
 }
 
 .textHeader {
@@ -255,15 +257,21 @@ input:checked + .slider:before {
 .textHeader h3 {
     font-size: 1.1rem;
     margin: 0;
-    
+    flex-grow: 1;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* 限制標題行數 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .status {
     font-size: 0.9rem;
-    padding: 4px;
-    border-radius: 4px;
+    padding: 6px 15px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    border-radius: 30px;
     background: #f5f5f5;
     align-self: flex-start; /* Adjust based on content width */
     white-space: nowrap; /* Prevent text wrapping */
@@ -290,7 +298,13 @@ input:checked + .slider:before {
 }
 .fee-info{
     border-left: 1px solid #aaa;
+    flex-shrink: 1;
+    width: 50%;
     padding-left: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* 限制標題行數 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .fa-star {

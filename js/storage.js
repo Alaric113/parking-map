@@ -7,13 +7,7 @@ const STORAGE_KEYS = {
 // 精度控制到小数点后6位（约0.1米精度）
 const GEO_PRECISION = 6;
 
-// 标准化经纬度格式
-function normalizeGeo(lat, lon) {
-    return [
-        Number(lat.toFixed(GEO_PRECISION)),
-        Number(lon.toFixed(GEO_PRECISION))
-    ];
-}
+
 
 // 初始化存储
 export async function initStorage() {
@@ -33,22 +27,22 @@ export function getFavorites() {
 }
 
 // 添加收藏
-export function addToFavorites(lat, lon) {
+export function addToFavorites(parkName) {
     try {
-        const geo = normalizeGeo(lat, lon);
+       
         const favorites = getFavorites();
 
         // 检查是否已存在
-        const exists = favorites.some(([existingLat, existingLon]) =>
-            existingLat === geo[0] && existingLon === geo[1]
+        const exists = favorites.some((existName) =>
+            existName === parkName
         );
 
         if (!exists) {
-            favorites.push(geo);
+            favorites.push(parkName);
             localStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(favorites));
-            console.log(`[${geo[0]}, ${geo[1]}] added to favorites`);
+            console.log(`[${parkName}] added to favorites`);
         } else {
-            console.log(`[${geo[0]}, ${geo[1]}] is already in favorites`);
+            console.log(`[${parkName}] is already in favorites`);
         }
         return true;
     } catch (error) {
@@ -58,18 +52,18 @@ export function addToFavorites(lat, lon) {
 }
 
 // 移除收藏
-export function removeFromFavorites(lat, lon) {
+export function removeFromFavorites(parkName) {
     try {
-        const geo = normalizeGeo(lat, lon);
+        
         let favorites = getFavorites();
 
         // 过滤掉匹配的经纬度
-        favorites = favorites.filter(([existingLat, existingLon]) =>
-            !(existingLat === geo[0] && existingLon === geo[1])
+        favorites = favorites.filter((existName) =>
+            !existName === parkName
         );
 
         localStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(favorites));
-        console.log(`[${geo[0]}, ${geo[1]}] removed from favorites`);
+        console.log(`[${parkName}] removed from favorites`);
         return true;
     } catch (error) {
         console.error('Error removing favorite:', error);

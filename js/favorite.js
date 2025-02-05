@@ -8,7 +8,7 @@ export function updateFavCards(parkingData) {
    
     // Clear the container
     container.innerHTML = '';
-   
+    
    
     if (parkingData.length === 0) {
        const noDataMessage = document.createElement('p');
@@ -19,10 +19,12 @@ export function updateFavCards(parkingData) {
        }
    
        parkingData.forEach(spot => {
-           const lat = parseFloat(spot.lat);
-           const lon = parseFloat(spot.lon);
-           const isFavorite = favorites.some(([favoriteLat, favoriteLon]) =>
-               favoriteLat === lat && favoriteLon === lon
+            const lat = parseFloat(spot.lat);
+            const lon = parseFloat(spot.lon);
+   
+           
+           const isFavorite = favorites.some((existName) =>
+               existName === spot.parkName
            );
            if (!isFavorite) {
                 return; // Skip non-favorite spots
@@ -41,9 +43,9 @@ export function updateFavCards(parkingData) {
            const favoriteIcon = document.createElement('i');
            favoriteIcon.className = isFavorite ? 'fa-solid fa-star' : 'fa-regular fa-star';
            favoriteBtn.onclick = (event) => {
-               event.stopPropagation();
-               toggleFavorite([lat, lon], favoriteIcon);
-           };
+                event.stopPropagation();
+                toggleFavorite(spot.parkName, favoriteIcon);
+            };
            favoriteBtn.appendChild(favoriteIcon);
    
            const parkName = document.createElement('h3');
@@ -51,12 +53,12 @@ export function updateFavCards(parkingData) {
    
            const status = document.createElement('p');
            status.className = 'status';
-           status.textContent = `${spot.availableSpaces}`;
-           if(spot.availableSpaces === '目前空格'){
-               status.classList.add('available');
-           }else if(spot.availableSpaces === '目前有車停放'){
-               status.classList.add('unavailable');
-           }
+           status.textContent = `${spot.left}/${spot.count}`;
+            if(spot.left > 0){
+                status.classList.add('available');
+            }else{
+                status.classList.add('unavailable');
+            }
    
            // Append elements to cardHeader
            cardHeader.appendChild(favoriteBtn);
@@ -91,7 +93,7 @@ export function updateFavCards(parkingData) {
            // Add click event to center map on the parking spot
            parkingCard.addEventListener('click', () => {
                const center = [lat, lon];
-               map.setView(center, 17);
+               map.setView(center, 16);
                L.popup()
                    .setLatLng(center)
                    .setContent(createPopupContent(spot))

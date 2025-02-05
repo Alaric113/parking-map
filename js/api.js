@@ -38,7 +38,7 @@ export async function getParkingData() {
             if (searchValue.value) {
                 return serachFilter(searchValue.value.trim());
             } else {
-                return enhanceParkingData();
+                return data;
             }
         }
     } catch (error) {
@@ -64,7 +64,7 @@ export function enhanceParkingData() {
     let filteredData = showAvailableOnly
         ? originalData.filter(item => item.remark === '目前空格')
         : originalData;
-
+        
     // 排序邏輯
     filteredData.sort((a, b) => {
         const aLat = parseFloat(a.lat);
@@ -117,16 +117,62 @@ export function serachFilter(text) {
 }
 //提供卡片資訊
 export function unifyData(data) { 
-    
-    return data.map(item => ({
-        id: item.id,
-        parkName: item.name,
-        lat: parseFloat(item.lat),
-        lon: parseFloat(item.lon),
-        availableSpaces: item.empty_lots,
-        weekdayFee: item.weekday_fee,
-        holidayFee: item.holiday_fee
-    }));
+    const result = data.reduce((acc, item) => {
+        const name = item.parkName || '未命名';
+        if (!acc[name]||name=='未命名') {
+            acc[name] = {
+                parkName: name,
+                count : 0,
+                left :0,
+                specialCount : 0,
+                specialLeft : 0,
+                weekdayFee: item.payex,
+                holidayFee: item.servicetime,
+                lat: [],
+                lon: [],
+            };
+        }
+        acc[name].lat.push(item.lat);
+        acc[name].lon.push(item.lon);
+        if(item.dataType == 6 && item.remark === '目前空格'){
+            acc[name].specialCount++;
+            acc[name].specialLeft++;
+        }else if(item.dataType == 6 && item.remark == '目前有車停放'){
+            acc[name].specialCount++;
+        }
+        if(item.remark === '目前空格' && item.dataType != 6){
+            acc[name].count++;
+            acc[name].left++;
+        }else if(item.remark == '目前有車停放' && item.dataType != 6){
+            acc[name].count++;
+        }
+        return acc;
+    }, {});
+    const formattedResult = Object.values(result); 
+
+    formattedResult.sort((a, b) => {
+        const favorites = getFavorites();
+
+
+        const aIsFavorite = favorites.some((existName) =>
+            existName === a.parkName
+        );
+        const bIsFavorite = favorites.some((existName) =>
+            existName === b.parkName
+        );
+        if (aIsFavorite && !bIsFavorite) return -1;
+        if (!aIsFavorite && bIsFavorite) return 1;
+
+        const aLeft = a.left>0;
+        const bLeft = b.left>0;
+        if (aLeft && !bLeft) return -1;
+        if (!aLeft && bLeft) return 1;
+
+        return 0;
+    });
+
+
+    return formattedResult
 }
 
 // 獲取本地快取數據

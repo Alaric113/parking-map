@@ -178,8 +178,8 @@ async function updateParkingData() {
         updateMap(data, map);
 
         // Update cards
-        updateParkingCards(data);
-        updateFavCards(data)
+        updateParkingCards(unifyData(data));
+        updateFavCards(unifyData(data));
 
         // Update last refresh time
         document.getElementById('refresh-time').textContent =
@@ -191,7 +191,7 @@ async function updateParkingData() {
 
 // 主頁面停車場卡片更新
 function updateParkingCards(parkingData) {
-    console.log(parkingData);
+    
     const container = document.getElementById('parkingCards');
     const favorites = getFavorites();
 
@@ -208,11 +208,16 @@ function updateParkingCards(parkingData) {
     }
 
     parkingData.forEach(spot => {
+        if(spot.count === 0&&spot.specialCount === 0){
+            return;
+        }
         const lat = parseFloat(spot.lat);
         const lon = parseFloat(spot.lon);
-        const isFavorite = favorites.some(([favoriteLat, favoriteLon]) =>
-            favoriteLat === lat && favoriteLon === lon
+   
+        const isFavorite = favorites.some((existName) =>
+            existName === spot.parkName
         );
+       
 
         // Create elements
         const parkingCard = document.createElement('div');
@@ -228,7 +233,7 @@ function updateParkingCards(parkingData) {
         favoriteIcon.className = isFavorite ? 'fa-solid fa-star' : 'fa-regular fa-star';
         favoriteBtn.onclick = (event) => {
             event.stopPropagation();
-            toggleFavorite([lat, lon], favoriteIcon);
+            toggleFavorite(spot.parkName, favoriteIcon);
         };
         favoriteBtn.appendChild(favoriteIcon);
 
@@ -237,10 +242,10 @@ function updateParkingCards(parkingData) {
 
         const status = document.createElement('p');
         status.className = 'status';
-        status.textContent = `${spot.availableSpaces}`;
-        if(spot.availableSpaces === '目前空格'){
+        status.textContent = `${spot.left}/${spot.count}`;
+        if(spot.left > 0){
             status.classList.add('available');
-        }else if(spot.availableSpaces === '目前有車停放'){
+        }else{
             status.classList.add('unavailable');
         }
 
@@ -277,7 +282,7 @@ function updateParkingCards(parkingData) {
         // Add click event to center map on the parking spot
         parkingCard.addEventListener('click', () => {
             const center = [lat, lon];
-            map.setView(center, 17);
+            map.setView(center, 16);
             L.popup()
                 .setLatLng(center)
                 .setContent(createPopupContent(spot))
@@ -313,17 +318,16 @@ function filterData(){
 document.getElementById('showAvailableOnly').addEventListener('change', filterData);
 
 // 收藏圖標toggle收藏圖標toggle
-window.toggleFavorite = function (geo, favoriteIcon) {
+window.toggleFavorite = function (parkName, favoriteIcon) {
     const favorites = getFavorites();
-    const isFavorite = favorites.some(([favoriteLat, favoriteLon]) =>
-        favoriteLat === geo[0] && favoriteLon === geo[1]
-    );
+    const isFavorite = favorites.includes(parkName);
+    console.log(isFavorite)
 
     if (isFavorite) {
-        removeFromFavorites(geo[0], geo[1]);
+        removeFromFavorites(parkName);
         favoriteIcon.className = 'fa-regular fa-star';
     } else {
-        addToFavorites(geo[0], geo[1]);
+        addToFavorites(parkName);
         favoriteIcon.className = 'fa-solid fa-star';
     }
     updateParkingData()
