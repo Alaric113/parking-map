@@ -67,7 +67,9 @@ function getSpotCenter(spot) {
 function addPolygonMarker(spot, map) {
     const coords = parseWKT(spot.wkt);
     const polygon = L.polygon(coords, {
-        color: spot.remark == '目前空格' ? '#4465c6' : '#F44336',
+        color : (spot.dataType == 6 && spot.remark === '目前空格') ? '#3b67f7' :
+                  (spot.remark === '目前空格') ? '#6eff66' : 
+                  '#F44336',
         weight: 2,
         opacity: 1,
         fillOpacity: 0.3
@@ -107,7 +109,7 @@ export function createPopupContent(spot) {
         createFavoriteButton(spot, isFavorite),
         createParkName(spot.parkName),
         createStatus(spot.remark),
-        createFeeInfo(spot.weekdayFee, spot.holidayFee)
+        createFeeInfo(spot.weekdayFee, spot.holidayFee, spot.dataType)
     ]);
 
     return popupDiv;
@@ -152,7 +154,7 @@ function createStatus(remark) {
     return status;
 }
 
-function createFeeInfo(weekdayFee, holidayFee) {
+function createFeeInfo(weekdayFee, holidayFee, type) {
     const feeInfoDiv = document.createElement('div');
     feeInfoDiv.className = 'fee-info';
 
@@ -161,8 +163,16 @@ function createFeeInfo(weekdayFee, holidayFee) {
     feeInfoDiv.appendChild(weekdayFeeP);
 
     const holidayFeeP = document.createElement('p');
-    holidayFeeP.textContent = `收費時間: ${holidayFee || '尚無資料'}`;
+    holidayFeeP.textContent = `收費時間: ${holidayFee + type || '尚無資料'}`;
     feeInfoDiv.appendChild(holidayFeeP);
+
+    const parkType = document.createElement('p');
+    if(type == 6){
+        var typeText = '身障';
+    } 
+    parkType.textContent = `一般/身障: ${typeText || '一般'}`;
+    feeInfoDiv.appendChild(parkType);
+
 
     return feeInfoDiv;
 }

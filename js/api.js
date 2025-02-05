@@ -115,9 +115,9 @@ export function serachFilter(text) {
     });
     return filteredData;
 }
-
+//提供卡片資訊
 export function unifyData(data) { 
-    // ��理不符合規範的數��
+    
     return data.map(item => ({
         id: item.id,
         parkName: item.name,

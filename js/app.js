@@ -47,8 +47,6 @@ function getCurrentVersion() {
         currentVersionElement.textContent = '未啟用 Service Worker';
     }
 }
-
-
 // 检查更新
 function checkForUpdates() {
     updateStatusElement.textContent = '檢查更新中...';
@@ -66,7 +64,6 @@ function checkForUpdates() {
             updateStatusElement.textContent = '檢查更新失敗';
         });
 }
-
 // 监听 Service Worker 的消息
 if (navigator.serviceWorker) {
     navigator.serviceWorker.addEventListener('message', (event) => {
@@ -78,8 +75,7 @@ if (navigator.serviceWorker) {
         }
     });
 }
-
-// 初始化
+// sw初始化
 document.addEventListener('DOMContentLoaded', () => {
     getCurrentVersion();
     checkUpdateButton.addEventListener('click', checkForUpdates);
@@ -88,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let map, currentPosition;
 let updateInterval;
 
-// Initialize application
+//程式初始化
 async function initApp() {
     // Initialize storage and settings
     await initStorage();
@@ -110,8 +106,7 @@ async function initApp() {
     // Initialize location tracking
     initLocationTracking();
 }
-
-// Setup navigation
+// 設定定位
 function setupNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
@@ -123,24 +118,21 @@ function setupNavigation() {
         });
     });
 }
-
-
+//頁面導航
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
     });
     document.getElementById(pageId).classList.add('active');
 }
-
+//更新頁面導航圖標
 function updateNavActiveState(activeId) {
     document.querySelectorAll('.nav-item').forEach(item => {
         const itemId = item.getAttribute('href').substring(1);
         item.classList.toggle('active', itemId === activeId);
     });
 }
-
-
-// Location tracking
+// 定位初始化
 function initLocationTracking() {
     const locateButton = document.getElementById('locate-me');
     locateButton.addEventListener('click', () => {
@@ -162,7 +154,7 @@ function initLocationTracking() {
     });
 }
 
-// Data updates
+// 資料更新迴圈預設10秒
 async function startDataUpdates(interval) {
     // Initial update
     await updateParkingData();
@@ -175,11 +167,12 @@ async function startDataUpdates(interval) {
     // Start new interval
     updateInterval = setInterval(updateParkingData, interval * 1000);
 }
-
+//定時資料獲取分發
 async function updateParkingData() {
     try {
         const data = await getParkingData();
         if (!data) return;
+        
 
         // Update map
         updateMap(data, map);
@@ -196,9 +189,9 @@ async function updateParkingData() {
     }
 }
 
-// Render parking cards with fee info and favorite functionality
+// 主頁面停車場卡片更新
 function updateParkingCards(parkingData) {
-    console.log(unifyData(parkingData));
+    console.log(parkingData);
     const container = document.getElementById('parkingCards');
     const favorites = getFavorites();
 
@@ -295,7 +288,7 @@ function updateParkingCards(parkingData) {
         container.appendChild(parkingCard);
     });
 }
-
+// 搜索框(是否保留?)
 document.getElementById('searchCards').addEventListener('input', (event) => {
     const searchValue = document.getElementById('searchCards').value.trim();
     if (searchValue) {
@@ -304,7 +297,7 @@ document.getElementById('searchCards').addEventListener('input', (event) => {
         updateParkingCards(enhanceParkingData());
     }
 })
-
+//過濾資料(是否保留?)
 function filterData(){
     const searchValue = document.getElementById('searchCards').value.trim();
     if (searchValue) {
@@ -316,10 +309,10 @@ function filterData(){
     updateMap(enhanceParkingData(), map)
 
 }
-
+//只顯示停車slider 監聽器
 document.getElementById('showAvailableOnly').addEventListener('change', filterData);
 
-// Favorite toggle handler
+// 收藏圖標toggle收藏圖標toggle
 window.toggleFavorite = function (geo, favoriteIcon) {
     const favorites = getFavorites();
     const isFavorite = favorites.some(([favoriteLat, favoriteLon]) =>
@@ -333,10 +326,9 @@ window.toggleFavorite = function (geo, favoriteIcon) {
         addToFavorites(geo[0], geo[1]);
         favoriteIcon.className = 'fa-solid fa-star';
     }
-    updateParkingCards(filterData())
-    updateFavCards(enhanceParkingData())
+    updateParkingData()
 };
-
+//通知權限
 function requestNotificationPermission() {
     if ('Notification' in window) {
         Notification.requestPermission().then((permission) => {
@@ -350,6 +342,7 @@ function requestNotificationPermission() {
         console.log('當前瀏覽器不支持通知');
     }
 }
+//通知
 function showNotification(title, body) {
     if ('Notification' in window && Notification.permission === 'granted') {
         new Notification(title, {
@@ -359,7 +352,7 @@ function showNotification(title, body) {
     }
 }
 
-// Initialize app
+// 全域初始化
 document.addEventListener('DOMContentLoaded', ()=>{
     initApp()
     requestNotificationPermission();
