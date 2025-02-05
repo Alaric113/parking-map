@@ -1,7 +1,8 @@
-const CACHE_VERSION = 'v3.1.6'; // 每次更新時修改版本號
+// Cache configuration
+const CACHE_VERSION = 'v3.1.6';
 const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
 
-// 需要缓存的资源列表
+// Assets to be cached
 const ASSETS = [
   './',
   './index.html',
@@ -19,88 +20,96 @@ const ASSETS = [
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
 ];
 
-// 安裝時清除舊緩存並緩存新資源
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      return caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS));
+// Cache management functions
+async function deleteOldCaches() {
+  const cacheNames = await caches.keys();
+  return Promise.all(
+    cacheNames.map(cacheName => {
+      if (cacheName !== CACHE_NAME) {
+        return caches.delete(cacheName);
+      }
     })
   );
-  self.skipWaiting(); // 强制新 Service Worker 立即激活
-});
+}
 
-// 激活時清理舊緩存
-self.addEventListener('activate', (event) => {
+async function cacheAssets() {
+  const cache = await caches.open(CACHE_NAME);
+  return cache.addAll(ASSETS);
+}
+
+// Install event handler
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    (async () => {
+      await deleteOldCaches();
+      await cacheAssets();
+      await self.skipWaiting();
+    })()
   );
-  self.clients.claim(); // 立即控制所有客户端
 });
 
-// 優先從網路獲取，失敗時回退緩存
-self.addEventListener('fetch', (event) => {
+// Activate event handler
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    (async () => {
+      await deleteOldCaches();
+      await self.clients.claim();
+    })()
+  );
+});
+
+// Fetch event handler - Network first, fallback to cache
+self.addEventListener('fetch', event => {
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // 如果是靜態資源，更新緩存
+    (async () => {
+      try {
+        const response = await fetch(event.request);
+        
+        // Cache successful GET requests
         if (event.request.method === 'GET' && event.request.url.startsWith('http')) {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(event.request, response.clone());
         }
+        
         return response;
-      })
-      .catch(() => caches.match(event.request))
+      } catch (error) {
+        const cachedResponse = await caches.match(event.request);
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        throw error;
+      }
+    })()
   );
 });
 
-// 监听来自页面的消息
-self.addEventListener('message', (event) => {
+// Version check message handler
+self.addEventListener('message', event => {
   if (event.data === 'get-version') {
     event.source.postMessage({ version: CACHE_VERSION });
   }
 });
 
-
-// sw.js
-self.addEventListener('push', (event) => {
+// Push notification handler
+self.addEventListener('push', event => {
   const payload = event.data ? event.data.text() : '新通知';
-  const title = '停車地圖通知';
-
-  const options = {
-      body: payload,
-      icon: '/icons/icon-192x192.png', // 替换为你的图标路径
-      badge: '/icons/badge-72x72.png', // 替换为你的徽章路径
+  
+  const notificationOptions = {
+    body: payload,
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/badge-72x72.png'
   };
-
+  
   event.waitUntil(
-      self.registration.showNotification(title, options)
+    self.registration.showNotification('停車地圖通知', notificationOptions)
   );
 });
 
-// 处理通知点击事件
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close(); // 关闭通知
-
-  // 打开应用页面
+// Notification click handler
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  
   event.waitUntil(
-      clients.openWindow('/') // 替换为你的应用首页路径
+    clients.openWindow('/')
   );
 });

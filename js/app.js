@@ -5,85 +5,106 @@ import { initSettings, getSettings, saveSettings } from './settings.js';
 import { getParkingData, searchFilter,unifyData,availableFilter} from './api.js';
 import { updateFavCards } from './favorite.js';
 
-
-
-// 获取版本信息和检查更新按钮
-const currentVersionElement = document.getElementsByClassName('current-version');
-const checkUpdateButton = document.getElementById('check-update-btn');
-const updateStatusElement = document.getElementById('update-status');
+// Service Worker Configuration
 let odata = [];
-let CACHE_VERSION
+let CACHE_VERSION;
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('Service Worker 註冊成功:', registration);
-  
-          // 检查是否有新版本
-          registration.onupdatefound = () => {
-            const installingWorker = registration.installing;
-            installingWorker.onstatechange = () => {
-              if (installingWorker.state === 'installed') {
-                if (navigator.serviceWorker.controller) {
-                  console.log('新版本已準備好，請刷新頁面以更新');
-                  // 提示用户刷新页面
-                } else {
-                  console.log('Service Worker 已安裝');
-                }
-              }
-            };
-          };
-        })
-        .catch((error) => {
-          console.error('Service Worker 註冊失敗:', error);
+// Initialize and manage Service Worker functionality
+function initServiceWorker() {
+    const currentVersionElements = document.getElementsByClassName('current-version');
+    const checkUpdateButton = document.getElementById('check-update-btn');
+    const updateStatusElement = document.getElementById('update-status');
+
+    if ('serviceWorker' in navigator) {
+        // Register Service Worker
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('Service Worker 註冊成功:', registration);
+
+                    // 監聽更新
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        
+                        newWorker.addEventListener('statechange', () => {
+                            // 當新的 Service Worker 狀態改變時
+                            if (newWorker.state === 'installed') {
+                                if (navigator.serviceWorker.controller) {
+                                    const answer = window.confirm('發現新版本，是否立即更新？');
+                                    if (answer) {
+                                        window.location.reload();
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                    // 定期檢查更新
+                    setInterval(() => {
+                        registration.update();
+                    }, 1800000); // 每30分鐘檢查一次
+                })
+                .catch(error => {
+                    console.error('Service Worker 註冊失敗:', error);
+                });
         });
-    });
-  }
-// 获取当前版本
-function getCurrentVersion() {
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage('get-version');
-    } else {
-        currentVersionElement.textContent = '未啟用 Service Worker';
+
+        // 監聽來自 Service Worker 的訊息
+        navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data && event.data.version) {
+                Array.from(currentVersionElements).forEach(element => {
+                    element.innerHTML = event.data.version;
+                    CACHE_VERSION = event.data.version;
+                });
+            }
+        });
+
+        // 檢查版本
+        if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage('get-version');
+        }
+
+        // 設置更新檢查按鈕
+        checkUpdateButton.addEventListener('click', () => {
+            updateStatusElement.textContent = '檢查更新中...';
+            checkForUpdates(updateStatusElement);
+        });
     }
 }
-// 检查更新
-function checkForUpdates() {
-    updateStatusElement.textContent = '檢查更新中...';
-    fetch('./sw.js')
-        .then((response) => response.text())
-        .then((scriptText) => {
-            
+
+// Check for updates
+function checkForUpdates(updateStatusElement) {
+    fetch('/sw.js')
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+        })
+        .then(scriptText => {
             const versionMatch = scriptText.match(/const CACHE_VERSION = '(.+?)';/);
-            console.log(versionMatch)
-            if (versionMatch[1] !== CACHE_VERSION) {
+            if (versionMatch && versionMatch[1] !== CACHE_VERSION) {
                 updateStatusElement.textContent = '發現新版本，請刷新頁面以更新';
+                if (confirm('發現新版本，是否立即更新？')) {
+                    window.location.reload();
+                }
             } else {
                 updateStatusElement.textContent = '已是最新版本';
             }
         })
-        .catch((error) => {
-            console.error('error:',error)
+        .catch(error => {
+            console.error('檢查更新時發生錯誤:', error);
             updateStatusElement.textContent = '檢查更新失敗';
         });
 }
-// 监听 Service Worker 的消息
-if (navigator.serviceWorker) {
-    navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.version) {
-            for(let i of currentVersionElement){
-                i.innerHTML = event.data.version
-                CACHE_VERSION =event.data.version
-            }
-    
-        }
-    });
-}
-// sw初始化
-document.addEventListener('DOMContentLoaded', () => {
-    getCurrentVersion();
-    checkUpdateButton.addEventListener('click', checkForUpdates);
+
+// Clear caches on installation
+self.addEventListener('install', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => caches.delete(cacheName))
+            );
+        })
+    );
 });
 
 let map, currentPosition;
@@ -356,9 +377,9 @@ function showNotification(title, body) {
 }
 
 // 全域初始化
-document.addEventListener('DOMContentLoaded', ()=>{
-    initApp()
-    requestNotificationPermission();
+document.addEventListener('DOMContentLoaded', () => {
+    initServiceWorker();
+    initApp();
 });
     
 
