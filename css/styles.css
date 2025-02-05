@@ -191,8 +191,8 @@ input:checked + .slider:before {
 #searchCards {
     position: absolute;
     top: 1rem;
-    left: 10%;
-    width: 80%;
+    left: 15%;
+    width: 70%;
     background: #fffaeb;
     height: 1.5rem;
     border-radius: 10px;
