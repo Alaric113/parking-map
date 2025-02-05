@@ -145,11 +145,14 @@ input:checked + .slider:before {
 .map-container {
     position: relative;
     height: 40vh;
+    padding: 1rem;
+    padding-bottom: 0;
 }
 
 #map {
     height: 100%;
     width: 100%;
+    border-radius: 10px;
 }
 
 /* Controls */
@@ -177,21 +180,24 @@ input:checked + .slider:before {
 #parking-info {
     padding: 1rem;
     padding-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .section-header {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    align-items: center;
+    align-items: end;
     margin-bottom: 0.5rem;
     width: 100%;
+    padding: 1rem;
+    padding-bottom: 0;
 }
 
 #searchCards {
-    position: absolute;
-    top: 1rem;
-    left: 15%;
+    
     width: 70%;
     background: #fffaeb;
     height: 1.5rem;

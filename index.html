@@ -41,6 +41,16 @@
     <main id="main-content">
         <!-- Home Page -->
         <div id="home" class="page active">
+            <div class="section-header">
+                <span id="refresh-time">尚無</span>
+                <h2 >即時路邊車位</h2>
+                <div class="filter-control" id="filter-control">
+                    <label class="switch">
+                        <input type="checkbox" id="showAvailableOnly">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
             <div class="map-container">
                 <div id="map"></div>
                 <div id="location-controls">
@@ -51,16 +61,7 @@
                 
             </div>
             <div id="parking-info">
-                <div class="section-header">
-                    <span id="refresh-time">尚無</span>
-                    <h2 >即時路邊車位</h2>
-                    <div class="filter-control" id="filter-control">
-                        <label class="switch">
-                            <input type="checkbox" id="showAvailableOnly">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
+                
                 <input type="text" id="searchCards" placeholder="搜尋路邊停車...">
                 <div id="parkingCards" class="cards">目前無資料顯示</div>
             </div>

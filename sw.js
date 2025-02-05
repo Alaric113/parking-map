@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v3.1.5'; // 每次更新時修改版本號
+const CACHE_VERSION = 'v3.1.6'; // 每次更新時修改版本號
 const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
 
 // 需要缓存的资源列表

@@ -12,6 +12,7 @@ const currentVersionElement = document.getElementsByClassName('current-version')
 const checkUpdateButton = document.getElementById('check-update-btn');
 const updateStatusElement = document.getElementById('update-status');
 let odata = [];
+let CACHE_VERSION
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -53,14 +54,17 @@ function checkForUpdates() {
     fetch('./sw.js')
         .then((response) => response.text())
         .then((scriptText) => {
+            
             const versionMatch = scriptText.match(/const CACHE_VERSION = '(.+?)';/);
-            if (versionMatch && versionMatch[1] !== CACHE_VERSION) {
+            console.log(versionMatch)
+            if (versionMatch[1] !== CACHE_VERSION) {
                 updateStatusElement.textContent = '發現新版本，請刷新頁面以更新';
             } else {
                 updateStatusElement.textContent = '已是最新版本';
             }
         })
-        .catch(() => {
+        .catch((error) => {
+            console.error('error:',error)
             updateStatusElement.textContent = '檢查更新失敗';
         });
 }
@@ -70,6 +74,7 @@ if (navigator.serviceWorker) {
         if (event.data && event.data.version) {
             for(let i of currentVersionElement){
                 i.innerHTML = event.data.version
+                CACHE_VERSION =event.data.version
             }
     
         }

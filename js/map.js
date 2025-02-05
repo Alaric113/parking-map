@@ -14,7 +14,7 @@ export function initMap(defaultLat, defaultLon) {
 
 function addTileLayer(map) {
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
+        attribution: false,
         maxZoom: 24
     }).addTo(map);
 }
