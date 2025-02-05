@@ -13,7 +13,32 @@ const checkUpdateButton = document.getElementById('check-update-btn');
 const updateStatusElement = document.getElementById('update-status');
 let odata = [];
 
-
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker 註冊成功:', registration);
+  
+          // 检查是否有新版本
+          registration.onupdatefound = () => {
+            const installingWorker = registration.installing;
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  console.log('新版本已準備好，請刷新頁面以更新');
+                  // 提示用户刷新页面
+                } else {
+                  console.log('Service Worker 已安裝');
+                }
+              }
+            };
+          };
+        })
+        .catch((error) => {
+          console.error('Service Worker 註冊失敗:', error);
+        });
+    });
+  }
 // 获取当前版本
 function getCurrentVersion() {
     if (navigator.serviceWorker && navigator.serviceWorker.controller) {
