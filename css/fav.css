@@ -29,7 +29,7 @@
 }
 
 #favorites-list {
-    flex: 1; /* 占据剩余空间 */
+    flex: 1; /*占据剩 余空间 */
     padding: 1rem;
     overflow-y: auto; /* 允许垂直滚动 */
     height: 65vh; /* 占据 60% 的视口高度 */
@@ -41,4 +41,6 @@
     flex-wrap: wrap;
     gap : 1rem;
     justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
 }

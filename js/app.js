@@ -2,7 +2,7 @@
 import { initMap, updateMap, createPopupContent } from './map.js';
 import { initStorage, getFavorites, addToFavorites, removeFromFavorites } from './storage.js';
 import { initSettings, getSettings, saveSettings } from './settings.js';
-import { getParkingData, searchFilter,unifyData,availableFilter} from './api.js';
+import { getParkingData, searchFilter,unifyData} from './api.js';
 import { updateFavCards } from './favorite.js';
 
 // Service Worker Configuration
@@ -212,17 +212,20 @@ function updateParkingData() {
     let data = odata
     const searchValue = document.getElementById('searchCards').value.trim()
 
+    const unifedData = unifyData(data)
+
     if (searchValue) {
 
         // Update cards
+        
             
         updateMap(searchFilter(data,searchValue), map);
-        updateParkingCards(searchFilter(unifyData(data),searchValue));
+        updateParkingCards(searchFilter(unifedData,searchValue));
             
     } else {
         updateMap(data, map);
-        updateParkingCards(unifyData(data));
-        updateFavCards(unifyData(data));
+        updateParkingCards(unifedData);
+        updateFavCards(unifedData);
     }
    
     

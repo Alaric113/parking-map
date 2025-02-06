@@ -18,7 +18,7 @@
 }
 
 #parkingCards {
-    overflow-y: auto;
+    
     height: 50vh;
 }
 
@@ -130,11 +130,13 @@ input:checked + .slider:before {
     flex: 1;
     overflow-y: auto;
     position: relative;
+    padding-bottom: calc(var(--mobile-nav-height) + 1rem);
 }
 
 .page {
     display: none;
     height: 100%;
+    width: 100%;
 }
 
 .page.active {
@@ -184,24 +186,27 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .section-header {
+    position: relative;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     align-items: end;
-    margin-bottom: 0.5rem;
     width: 100%;
     padding: 1rem;
     padding-bottom: 0;
 }
 
 #searchCards {
-    align-self: center;
-    width: 90vw;
-    left: 5vw;
-    position: relative;
+    /* 修改以下属性 */
+    width: calc(100% - 2rem); /* 抵消左右 margin */
+    margin: 0 1rem; /* 保持垂直方向无margin */
+    margin-top: 5px;
+    /* 其他属性保持不变 */
+    box-sizing: border-box;
     background: #fffaeb;
     height: 1.5rem;
     border-radius: 10px;
@@ -209,9 +214,15 @@ input:checked + .slider:before {
     padding: 1rem;
     text-decoration: none;
     z-index: 1000;
-    color: 201A09;
-    
+    color: #201A09; /* 修正颜色值 */
+    font-size: 14px;
+    background-image:url(https://cdn2.hubspot.net/hubfs/4004166/bioticresearch_website_assets/images/search_icon.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 40px;
+    -webkit-appearance: none;
 }
+
 
 #refresh-time {
     width: 25%;
@@ -231,26 +242,28 @@ input:checked + .slider:before {
 }
 
 #parkingCards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
+    justify-content: start;
+    align-items: start;
+    column-gap: 0.5rem;
 }
 
 .parking-card {
     background: var(--card-background);
-    border-bottom: 1px solid #ddd;
+    border: 1px solid #ddd;
     box-sizing: border-box;
     border-radius: 8px;
     padding: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 1 1 calc(50% - 10px);
+    width: 100%;
+    min-width: 320px;
+    margin: 0.5rem;
     flex: none;
-    margin-bottom: 1rem;
-    height: 7rem;
+    height: auto;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -375,7 +388,7 @@ input:checked + .slider:before {
     border-top: 1px solid #e0e0e0;
     padding: 0.5rem;
     padding-bottom: 1rem;
-    z-index: 1000;
+    z-index: 1001;
 }
 
 .mobile-nav {
@@ -413,7 +426,7 @@ input:checked + .slider:before {
     
     .parking-card {
         flex: none;
-        width: calc(50% - 10px);
+        width: 100%;
         padding: 8px;
         position: relative;
         height: 5rem;;

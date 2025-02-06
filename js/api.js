@@ -81,10 +81,25 @@ export function availableFilter(data) {
 
 //提供卡片資訊
 export function unifyData(data) { 
-    
+    let noName = 0
     const result = data.reduce((acc, item) => {
-        const name = item.parkName || '未命名';
-        if (!acc[name]||name=='未命名') {
+        const name = item.parkName || `未命名${noName}`;
+        if(name.includes('未命名')){
+            acc[name] = {
+                parkName: name,
+                count : (item.dataType!=6)? 1:0,
+                left :(item.remark ==='目前空格'&&item.dataType!=6)? 1:0,
+                specialCount : (item.dataType ==6)?1:0,
+                specialLeft : (item.remark ==='目前空格'&&item.dataType==6)? 1:0,
+                weekdayFee: item.payex,
+                holidayFee: item.servicetime,
+                lat: [item.lat],
+                lon: [item.lon],
+            };
+            noName++
+            return acc
+        }
+        if (!acc[name]) {
             acc[name] = {
                 parkName: name,
                 count : 0,
@@ -111,6 +126,7 @@ export function unifyData(data) {
         }else if(item.remark == '目前有車停放' && item.dataType != 6){
             acc[name].count++;
         }
+        
         return acc;
     }, {});
     let formattedResult = Object.values(result); 
@@ -133,15 +149,18 @@ export function unifyData(data) {
         if (aLeft && !bLeft) return -1;
         if (!aLeft && bLeft) return 1;
 
+        const aName = a.parkName.includes('未命名')
+        const bName = b.parkName.includes('未命名')
+
+        if(aName&&!bName) return 1
+        if(!aName&&bName) return -1
+
         return 0;
     });
-    const availableOnly = document.getElementById('showAvailableOnly').checked
-    if (availableOnly) {
-        
-        formattedResult = availableFilter(formattedResult);
-    
-    }
-
+    //const availableOnly = document.getElementById('showAvailableOnly').checked
+    //if (availableOnly) {
+      //  formattedResult = availableFilter(formattedResult);
+    //}
 
     return formattedResult
 }
