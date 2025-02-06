@@ -200,6 +200,9 @@ async function fetchingParkingData(){
         if (!data) return;
         odata = data;
         updateParkingData();
+         // Update last refresh time
+        document.getElementById('refresh-time').textContent =
+        `${new Date().toLocaleTimeString()}`;
     } catch (error) {
         console.error('Failed to update parking data:', error);
     }
@@ -221,9 +224,7 @@ function updateParkingData() {
         updateParkingCards(unifyData(data));
         updateFavCards(unifyData(data));
     }
-    // Update last refresh time
-    document.getElementById('refresh-time').textContent =
-        `${new Date().toLocaleTimeString()}`;
+   
     
 }
 

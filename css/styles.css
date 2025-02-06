@@ -2,7 +2,7 @@
 :root {
     --sidebar-width: 240px;
     --mobile-nav-height: 60px;
-    --primary-color: #F5EFDB;
+    --primary-color: #A07D1C;
     --background-color: #f5f5f5;
     --card-background: #ffffff;
 }
@@ -153,6 +153,7 @@ input:checked + .slider:before {
     height: 100%;
     width: 100%;
     border-radius: 10px;
+    border: 1px solid #ccc;
 }
 
 /* Controls */
@@ -197,14 +198,15 @@ input:checked + .slider:before {
 }
 
 #searchCards {
-    
-    width: 70%;
+    align-self: center;
+    width: 90vw;
+    left: 5vw;
+    position: relative;
     background: #fffaeb;
     height: 1.5rem;
     border-radius: 10px;
-    border: 1px solid #eee;
+    border: 1px solid #ccc;
     padding: 1rem;
-    margin-bottom: 5px;
     text-decoration: none;
     z-index: 1000;
     color: 201A09;
