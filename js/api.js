@@ -146,6 +146,10 @@ export function unifyData(data) {
     return formattedResult
 }
 
+export function availableForMap(data){
+    return data.filter(item => item.remark === '目前空格')
+}
+
 // 獲取本地快取數據
 function getCachedParkingData() {
     // 這裡可以實現從 localStorage 或其他地方獲取快取數據

@@ -1,5 +1,6 @@
 // js/map.js
 import { getFavorites } from './storage.js';
+import { availableForMap } from './api.js';
 
 let markers = [];
 
@@ -33,6 +34,12 @@ function addUserLocationMarker(map) {
 
 export function updateMap(parkingData, map) {
     clearExistingMarkers(map);
+    const availableOnly = document.getElementById('showAvailableOnly').checked
+        if (availableOnly) {
+            
+            parkingData = availableForMap(parkingData);
+        
+        }
     addNewMarkers(parkingData, map);
 }
 

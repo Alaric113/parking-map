@@ -413,7 +413,7 @@ input:checked + .slider:before {
     
     .parking-card {
         flex: none;
-        width: calc(50% - 10px)
+        width: calc(50% - 10px);
         padding: 8px;
         position: relative;
         height: 5rem;;
