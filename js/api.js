@@ -36,7 +36,7 @@ export async function getParkingData() {
             originalData = data;
             const searchValue = document.getElementById('searchCards');
             if (searchValue.value) {
-                return serachFilter(searchValue.value.trim());
+                return searchFilter(searchValue.value.trim());
             } else {
                 return data;
             }

@@ -1,6 +1,6 @@
 // js/storage.js
 const STORAGE_KEYS = {
-    FAVORITES: 'parking-favorites-geo', // 使用新的 key 避免与旧数据冲突
+    FAVORITES: 'parking-favorites', // 使用新的 key 避免与旧数据冲突
     SETTINGS: 'parking-settings'
 };
 
@@ -56,12 +56,10 @@ export function removeFromFavorites(parkName) {
     try {
         
         let favorites = getFavorites();
-
         // 过滤掉匹配的经纬度
-        favorites = favorites.filter((existName) =>
-            !existName === parkName
+        favorites = favorites.filter(existName =>
+            existName !== parkName
         );
-
         localStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(favorites));
         console.log(`[${parkName}] removed from favorites`);
         return true;
