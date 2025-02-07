@@ -7,7 +7,7 @@ let originalData = [];
 
 
 // 主要的資料獲取函數
-export async function getParkingData() {
+export async function getParkingData(lat,lon) {
     const settings = getSettings();
 
     const proxyUrl = 'https://corsproxy.io/'; // 更換為其他代理服務
@@ -15,8 +15,8 @@ export async function getParkingData() {
     const url = proxyUrl + targetUrl; // 組合 URL
 
     const payload = new URLSearchParams({
-        lon: settings.defaultLon,
-        lat: settings.defaultLat,
+        lon: lon,
+        lat: lat,
         catagory: 'car',
         type: 1
     });

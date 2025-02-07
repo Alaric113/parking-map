@@ -9,7 +9,6 @@ export function initMap(defaultLat, defaultLon) {
 
     addTileLayer(map);
     addUserLocationMarker(map);
-
     return map;
 }
 
@@ -38,6 +37,7 @@ export function updateMap(parkingData, map) {
         if (availableOnly) {
             
             parkingData = availableForMap(parkingData);
+        
         
         }
     addNewMarkers(parkingData, map);

@@ -109,6 +109,10 @@ self.addEventListener('install', event => {
 
 let map, currentPosition;
 let updateInterval;
+let met = 0.008
+let ilat=settings
+let ilng=settings
+
 
 //程式初始化
 async function initApp() {
@@ -121,6 +125,22 @@ async function initApp() {
 
     // Initialize map
     map = initMap(settings.defaultLat, settings.defaultLon);
+    ilat=settings.defaultLat
+    ilng=settings.defaultLon
+    map.addEventListener('moveend',()=>{
+        let {lat,lng}= map.getCenter()
+        const distLat = Math.abs(lat-ilat)
+        const distLng = Math.abs(lng-ilng)
+        console.log(ilat)
+
+        if(distLat >met|| distLng> met){
+            console.log('即將更新地圖資料')
+            ilat = lat 
+            ilng = lng
+            fetchingParkingData()
+        }
+    })
+
 
     // Setup page navigation
     setupNavigation();
@@ -196,7 +216,7 @@ async function startDataUpdates(interval) {
 //定時資料獲取分發
 async function fetchingParkingData(){
     try {
-        const data = await getParkingData();
+        const data = await getParkingData(ilat,ilng);
         if (!data) return;
         odata = data;
         updateParkingData();
@@ -337,6 +357,7 @@ document.getElementById('searchCards').addEventListener('input', (event) => {
     console.log('typing')
     updateParkingData();
 })
+
 
 //只顯示停車slider 監聽器
 document.getElementById('showAvailableOnly').addEventListener('change', updateParkingData);
