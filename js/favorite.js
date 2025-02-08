@@ -32,13 +32,14 @@ export function updateFavCards(parkingData) {
    
            // Create elements
            const parkingCard = document.createElement('div');
-                   parkingCard.className = 'parking-card';
+                   
            
                    const cardHeader = document.createElement('div');
                    cardHeader.className = 'card-header';
            
                    const favoriteBtn = document.createElement('button');
                    favoriteBtn.className = `favorite-btn ${isFavorite ? 'active' : ''}`;
+                   parkingCard.className = `parking-card ${(spot.left>0) ? 'active' : ''}`;
            
                    const favoriteIcon = document.createElement('i');
                    favoriteIcon.className = isFavorite ? 'fa-solid fa-star' : 'fa-regular fa-star';

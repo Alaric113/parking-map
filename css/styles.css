@@ -321,6 +321,21 @@ input:checked + .slider:before {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.parking-card.active{
+    animation: invertcard 0.7s infinite alternate;
+}
+
+@keyframes invertcard {
+    0%{
+        filter: invert(0);
+    }
+
+    100%{
+        filter:invert(1)
+    }
+    
+}
+
 .favorite-btn {
     text-decoration: none;
     background-color: transparent;
@@ -418,6 +433,8 @@ input:checked + .slider:before {
     font-size: 1rem;
     clip-path: inset(0 3ch 0 0);
     animation: l4 1s steps(4) infinite;
+    position: relative;
+    top: 0;
   }
   .loader:before {
     content:"更新中..."
