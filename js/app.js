@@ -109,7 +109,7 @@ self.addEventListener('install', event => {
 
 let map, currentPosition;
 let updateInterval;
-let met = 0.008
+let met = 0.012
 let ilat=settings
 let ilng=settings
 

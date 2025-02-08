@@ -8,6 +8,7 @@ let originalData = [];
 
 // 主要的資料獲取函數
 export async function getParkingData(lat,lon) {
+    document.getElementsByClassName('loader')[0].style.display = 'flex'
     const settings = getSettings();
 
     const proxyUrl = 'https://corsproxy.io/'; // 更換為其他代理服務
@@ -35,6 +36,8 @@ export async function getParkingData(lat,lon) {
             console.log('成功從 API 獲取數據');
             originalData = data;
             const searchValue = document.getElementById('searchCards');
+            document.getElementsByClassName('loader')[0].style.display = 'none'
+
             if (searchValue.value) {
                 return searchFilter(searchValue.value.trim());
             } else {
