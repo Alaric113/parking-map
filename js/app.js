@@ -131,7 +131,6 @@ async function initApp() {
         let {lat,lng}= map.getCenter()
         const distLat = Math.abs(lat-ilat)
         const distLng = Math.abs(lng-ilng)
-        console.log(ilat)
 
         if(distLat >met|| distLng> met){
             console.log('即將更新地圖資料')
@@ -221,8 +220,10 @@ async function fetchingParkingData(){
         odata = data;
         updateParkingData();
          // Update last refresh time
-        document.getElementById('refresh-time').textContent =
-        `${new Date().toLocaleTimeString()}`;
+        for(let i of document.getElementsByClassName('refreshTime')){
+            i.textContent =`${new Date().toLocaleTimeString()}`;
+        }
+        
     } catch (error) {
         console.error('Failed to update parking data:', error);
     }

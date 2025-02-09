@@ -10,11 +10,12 @@
 }
 
 .notifyControl {
-    height: 20vh; /* 占据 40% 的视口高度 */
+    height: 2rem; /* 占据 40% 的视口高度 */
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: start;
+    justify-content: center;
     background-color: #f9f9f9; /* 可选：背景色 */
     border-bottom: 1px solid #eee; /* 可选：分隔线 */
 }
