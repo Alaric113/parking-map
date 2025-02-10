@@ -98,7 +98,7 @@ function createCustomIcon(type) {
 function getIconHtml(type) {
     switch (type) {
         case 'location':
-            return '<i class="fa-solid fa-circle-dot" style="color:blue"></i>';
+            return '<i class="fa-solid fa-circle-dot  currentLocation" style="color:blue"></i>';
         case 'available':
             return '<i class="fas fa-parking" style="color: #4CAF50;"></i>';
         default:

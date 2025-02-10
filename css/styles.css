@@ -336,6 +336,16 @@ input:checked + .slider:before {
     
 }
 
+/* HTML: <div class="loader"></div> */
+.currentLocation {
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 #0004;
+    animation: l12 1s infinite;
+  }
+  @keyframes l12 {
+      100% {box-shadow: 0 0 0 10px #0000}
+  }
+
 .favorite-btn {
     text-decoration: none;
     background-color: transparent;
