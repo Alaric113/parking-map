@@ -1,3 +1,4 @@
+//sw.js
 // Cache configuration
 const CACHE_VERSION = 'v3.2.5';
 const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
