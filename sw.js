@@ -1,5 +1,5 @@
 // Cache configuration
-const CACHE_VERSION = 'v3.2.4';
+const CACHE_VERSION = 'v3.2.5';
 const CACHE_NAME = `parking-map-${CACHE_VERSION}`;
 
 // Assets to be cached

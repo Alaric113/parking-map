@@ -111,12 +111,16 @@ export function createPopupContent(spot) {
     popupDiv.className = 'parking-popup';
 
     const isFavorite = checkIfFavorite(spot);
+    const cardHeader = document.createElement('div');
+    cardHeader.className = 'pop-header';
+    popupDiv.appendChild(createFavoriteButton(spot, isFavorite));
+    cardHeader.appendChild(createParkName(spot.parkName));
+    cardHeader.appendChild(createStatus(spot.remark,spot.count,spot.left));
+    popupDiv.appendChild(cardHeader);
 
     appendToPopup(popupDiv, [
-        createFavoriteButton(spot, isFavorite),
-        createParkName(spot.parkName),
-        createStatus(spot.remark),
-        createFeeInfo(spot.payex, spot.servicetime, spot.dataType)
+        
+        createFeeInfo(spot)
     ]);
 
     return popupDiv;
@@ -155,29 +159,29 @@ function createParkName(name) {
     return parkName;
 }
 
-function createStatus(remark) {
+function createStatus(remark, count, left) {
     const status = document.createElement('p');
-    status.textContent = `目前狀態: ${remark}`;
+    status.textContent = remark ? `狀態: ${remark}` : `狀態: ${left}/${count}`;
     return status;
-}
+  }
 
-function createFeeInfo(weekdayFee, holidayFee, type) {
+function createFeeInfo(spot, count, left) {
     const feeInfoDiv = document.createElement('div');
     feeInfoDiv.className = 'fee-info-pop';
 
     const weekdayFeeP = document.createElement('p');
-    weekdayFeeP.textContent = `收費資訊: ${weekdayFee || '尚無資料'}`;
+    weekdayFeeP.textContent = `收費: ${spot.weekdayFee ||spot.payex|| '尚無'}`;
     feeInfoDiv.appendChild(weekdayFeeP);
 
     const holidayFeeP = document.createElement('p');
-    holidayFeeP.textContent = `收費時間: ${holidayFee|| '尚無資料'}`;
+    holidayFeeP.textContent = `時間: ${spot.serviceTime||spot.holidayFee|| '尚無'}`;
     feeInfoDiv.appendChild(holidayFeeP);
 
     const parkType = document.createElement('p');
-    if(type == 6){
+    if(spot.dataType == 6){
         var typeText = '身障';
     } 
-    parkType.textContent = `一般/身障: ${typeText || '一般'}`;
+    parkType.textContent = `類型: ${typeText || '一般'}`;
     feeInfoDiv.appendChild(parkType);
 
 

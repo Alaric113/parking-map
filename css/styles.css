@@ -325,6 +325,54 @@ input:checked + .slider:before {
     animation: invertcard 0.7s infinite alternate;
 }
 
+
+.parking-popup{
+    display: flex;
+    height: 3rem;
+    width: 100%;
+    padding: 5px;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.parking-popup button {
+    margin: 0;
+}
+.pop-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    padding: 0;
+}
+
+.pop-header h3{
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.pop-header p{
+    margin: 0;
+    font-size: 0.8rem;
+    color: #A07D1C;
+}
+
+.fee-info-pop{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    padding: 0;
+}
+
+.fee-info-pop p{
+    margin: 0;
+    font-size: 0.9rem;
+    color: #777;
+}
+
 @keyframes invertcard {
     0%{
         filter: invert(0);
@@ -352,6 +400,7 @@ input:checked + .slider:before {
     border: none;
     cursor: pointer;
     width: 2.5rem;
+    min-width: 2.5rem;
     height: 2.5rem;
     background: #F5EFDB;
     border-radius: 10px;

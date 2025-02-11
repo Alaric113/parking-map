@@ -45,3 +45,23 @@
     display: grid;
     grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
 }
+
+#settings{
+    padding: 1rem;
+}
+
+.setting-item{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.setting-item label{
+    width: 7rem;
+}
+
+.setting-item input{
+    width: 10rem;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
