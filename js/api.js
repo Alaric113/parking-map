@@ -11,7 +11,7 @@ export async function getParkingData(lat,lon) {
     document.getElementsByClassName('loader')[0].style.display = 'flex'
     const settings = getSettings();
 
-    const proxyUrl = 'https://corsproxy.io/'; // 更換為其他代理服務
+    const proxyUrl = 'https://corsproxy.io/?key=e4730777&url='; // 更換為其他代理服務
     const targetUrl = 'https://itaipeiparking.pma.gov.taipei/MapAPI/GetAllPOIData';
     const url = proxyUrl + targetUrl; // 組合 URL
 
